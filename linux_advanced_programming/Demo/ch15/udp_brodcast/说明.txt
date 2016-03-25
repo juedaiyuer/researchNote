@@ -1,0 +1,7 @@
+如果没有设置BLOADCASE选项的不递送。
+如果bind端口不匹配不递送该套接口
+如果绑定的不是INADDR_ANY话,那么BIND的地址和目的地址匹配才能递送:也就是说你必须BIND一个广播地址或者绑定INADDR_ANY
+
+用ifconfig命令可以disable块网卡的BROADCAST标志，让其不能接受以太网广播。
+
+也可以使用ioctl的SIOCSIFFLAGS方法去掉一个接口的标志IFF_BROADCAST，使之不能接受以太网广播。
