@@ -1,0 +1,45 @@
+#Tinyhttpd个人笔记#
+
+
+*CGI*
+外部应用程序与Web服务器之间的接口标准,传递信息  
+处理来自表单的信息,服务器上做出相应的处理  
+
+
+main->startup->accept->request->execute->cgi  
+
+
+**1.main:sockaddr_in**
+
+ pos:netinet/in.h IPV4套接字地址结构  
+
+ Linux的互联网地址族,/usr/include/netinet
+
+**2. startup**
+
+1. 创建socket
+	httpd = socket(PF_INET,sock_STREAM,0);
+
+2. 地址绑定
+
+- 在绑定本地地址,或者连接远程地址时,memset初始化sockaddr_in结构
+- sin_family 协议 一般用AF_INET表示TCP/IP协议
+- sin_addr 联合体,IP地址,无符号长整型数据,只有一个唯一的字段s_addr. 
+
+>inet_addr()把字符串形式的IP地址转换成unsigned long型的整数值在赋值给s_addr
+
+>一个服务器进程需要绑定一个众所周知的地址或端口,以等待客户来连接,所用函数为bind()  
+>服务进程问题需要调用bind函数
+><sys/socket.h>  
+
+
+
+
+
+
+
+---
+
+1. AF = Address Family
+2. PF = Protocal Family
+3. AF_INET = PF_INET
