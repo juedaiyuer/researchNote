@@ -11,17 +11,19 @@
 
 #define MAXBUF 1024
 
+//argv[2] 端口号  argv[3]监听队列 
+
 int main(int argc, char *argv[])
 {
     int pid;	
-    int sockfd, new_fd;
+    int sockfd, new_fd;         //new_fd 服务端连接后,创建子进程；sockfd等待新的连接.
     socklen_t len;
     struct sockaddr_in my_addr, their_addr;
     unsigned int myport, lisnum;
     char buf[MAXBUF + 1];
 
     if (argv[2])
-		myport = atoi(argv[2]);
+		myport = atoi(argv[2]);  //将命令行字符转换成整数,用于端口
     else
 		myport = 7575;
 
@@ -36,7 +38,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
     }
     
-    bzero(&my_addr, sizeof(my_addr));
+    bzero(&my_addr, sizeof(my_addr));  //bzero不推荐使用,目前使用为memset
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(myport);
     if (argv[1])
