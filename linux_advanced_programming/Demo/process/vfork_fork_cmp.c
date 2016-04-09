@@ -4,6 +4,12 @@
 #include<stdio.h>
 #include<stdlib.h>
 int glob=6;
+
+/**
+	1.vfork()创建进程时并不复制父进程的地址空间,父子进程共享数据空间
+	
+*/
+
 int main()
 {
 	int var;

@@ -4,6 +4,11 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdlib.h>
+
+/**
+	1.父子进程对文件描述符的文件表项信息(文件读写位置)共享使用
+	2.例子程序,父子进程对一个文件进行写操作,结果写操作都是在同一文件,且写入数据不交叉覆盖,说明父子进程共享文件偏移,因此共享文件表项
+*/
 int main(int argc,char *argv[])
 {
     pid_t pid;

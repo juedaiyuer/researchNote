@@ -4,6 +4,13 @@
 #include<fcntl.h>
 #include<string.h>
 #include<stdlib.h>
+
+/**
+	1.int sprintf(char *str, const char *format, ...);
+	2.执行新代码对打开文件的处理 
+
+*/
+
 int main(int argc,char *argv[])
 {
 	int fd,status;
@@ -27,12 +34,12 @@ int main(int argc,char *argv[])
 	if(pid==0)
 	{	
 		char buf[128];
-		sprintf(buf,"%d",fd);
-		execl("./newcode","newcode",buf,(char *)0);
+		sprintf(buf,"%d",fd);  //fd已参数的形式传递给新代码,fd->buf->atoi->fd
+		execl("./newcode","newcode",buf,(char *)0);  
 	}
 	else
 	{
-		wait(&status);
+		wait(&status);    //父进程等待子进程执行完毕
 		printf("after child_process write\n");
 		system("cat test.txt");
 	}
