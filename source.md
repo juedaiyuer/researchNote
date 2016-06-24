@@ -2,27 +2,14 @@
 
 ##使用手册##
 
-1. [W3school](http://www.w3school.com.cn/)
-2. [PHP手册(中文版)](http://php.net/manual/zh/)
-3. [cplusplus](http://www.cplusplus.com/)
-4. [伯乐在线文档](https://github.com/jobbole)
-5. [计算机编程类中文书籍](https://github.com/juedaiyuer/free-programming-books-zh_CN)
-6. [Java在线中文API](http://www.yq1012.com/api/)
-7. [菜鸟要飞](http://www.newbiefly.com/)
-8. [我要自学网](http://www.51zxw.net/default.aspx)
-
----
-
-##使用工具##
-
-1. [jarfire:jar包下载](http://cn.jarfire.org/)
-2. [mvnrepository:jar包下载](http://mvnrepository.com/)
-
----
-
-##前端集合##
-1. [codepen](http://codepen.io/)
->codepen is a playground for the front and web
+- [W3school](http://www.w3school.com.cn/)
+- [PHP手册(中文版)](http://php.net/manual/zh/)
+- [cplusplus](http://www.cplusplus.com/)
+- [伯乐在线文档](https://github.com/jobbole)
+- [计算机编程类中文书籍](https://github.com/juedaiyuer/free-programming-books-zh_CN)
+- [Java在线中文API](http://www.yq1012.com/api/)
+- [菜鸟要飞](http://www.newbiefly.com/)
+- [我要自学网](http://www.51zxw.net/default.aspx)
 
 ---
 
@@ -43,19 +30,16 @@
 - [脚本之家](http://www.jb51.net/)
 - [infoQ](http://www.infoq.com/cn/)
 - [about云](http://www.aboutyun.com/forum-53-1.html)
-
+- [伯乐在线](http://hao.jobbole.com/)
+- [电子发烧友](http://www.elecfans.com/)
 
 ---
 
 ##写作工具##
-1. markdown web版:简书
-[简书](http://www.jianshu.com/)
 
-
-*画流程图*
-
-1. [在线processon](https://www.processon.com/)
-2. visio
+- [简书](http://www.jianshu.com/)
+- [在线processon](https://www.processon.com/)
+- visio
  
 ---
 
@@ -64,13 +48,20 @@
 - Inkscape(矢量图形编辑软件,linux平台可用)
 - GIMP(linux平台可用)
 
+##前端集合##
+- [codepen---前端](http://codepen.io/)
 
+##编辑器##
+
+- Vim
+- Sublime Text
+- Emacs
+- eclipse
+- Myeclipse
 
 ---
 
 ##道友##
-
-**博客园**
 
 1. [秋水Thinking](http://www.cnblogs.com/hnrainll/category/234345.html)      
 2. [廖雪峰](http://www.liaoxuefeng.com/)    
@@ -78,10 +69,6 @@
 4. [运维生存时间](https://www.ttlsa.com/)
 5. [竹子-博客](http://www.cnblogs.com/peida/)
 6. [博客园-孤傲苍狼](http://www.cnblogs.com/xdp-gacl/)
-
-**注解**
-
->Linux高级程序设计讲解者---Watchmen
 
 ---
 
@@ -94,26 +81,8 @@
 - 百度云(*****)
 - 360云盘
 - 腾讯云
-
-**注解**
-
->浏览器插件:evernote web clipper  
->[马克飞象](https://maxiang.io/)  
-
-
----
-
-##编辑器##
-
--  Vim
--  Sublime Text
--  Emacs
-
-**IDE**
-
-- eclipse
-- Myeclipse
-
+- [马克飞象](https://maxiang.io/) 
+- evernote web clipper(浏览器插件)
 
 ---
 
@@ -123,7 +92,7 @@
 
 ---
 
-##极客##
 
-1. [电子发烧友](http://www.elecfans.com/)
+
+
 
