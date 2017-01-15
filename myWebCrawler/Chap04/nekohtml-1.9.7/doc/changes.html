@@ -1,0 +1,474 @@
+<title>NekoHTML | Change History</title>
+<link rel=stylesheet type=text/css href=style.css>
+
+<h1>Change History</h1>
+<div class='navbar'>
+[
+<a href='index.html'>Top</a>
+|
+<a href='usage.html'>Usage</a>
+|
+<a href='settings.html'>Settings</a>
+|
+<a href='filters.html'>Filters</a>
+|
+<a href='javadoc/index.html'>JavaDoc</a>
+|
+<a href='faq.html'>FAQ</a>
+|
+<a href='software.html'>Software</a>
+|
+Changes
+]
+</div>
+
+<h2>Releases</h2>
+<dl>
+ <dt>Version 1.9.7 (5 Apr 2008)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-1.9.7.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-1.9.7.tar.gz'>tgz</a>]
+ <dd>Call methods that differ between Xerces versions using a bridge pro Xerces version rather than reflection.
+ignore closing instruction in &lt;form .../&gt;,
+fixed issues 1922810, 1927966, 1926831 (thanks to Ahmed Ashour)
+ <dt>Version 1.9.6.2 (17 Mar 2008)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-1.9.6.2.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-1.9.6.2.tar.gz'>tgz</a>]
+ <dd>Accept comments and tags in &lt;title&gt; element as browsers do (patch provided by Ahmed Ashour, issue 1879598),
+ discard form opening tag when it is within an other form,
+ added <font color='red'>experimental</font> possibility to immediately evaluate a new input source during parsing
+ (patch provided by Ahmed Ashour, issue 1895946).
+ added <font color='red'>experimental</font> interface to enable handlers to be notified of ignored opening and closing tags.
+ Finally fix compatibility with Java 1.3.
+
+ <dt>Version 1.9.6.1 (23 Jan 2008)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-1.9.6.1.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-1.9.6.1.tar.gz'>tgz</a>]
+ <dd>Fixed charset regression reported by Marc Guillemot.
+ <dt>Version 1.9.6 (14 Dec 2007)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-1.9.6.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-1.9.6.tar.gz'>tgz</a>]
+ <dd><font color=green>Changed license to Apache 2.0</font>;
+ 	 boosted the version number to reflect the maturity of the project;
+ 	 re-organized project files to decouple it from the rest of the
+ 	 	CyberNeko Tools for XNI;
+ 	 updated xercesMinimal.jar and source so that NekoHTML compiles using
+ 	 	Xerces-J 2.9.1;
+ 	 changed default behavior to <em>not</em> normalize attribute values
+ 	 	and added new feature to allow user to turn on normalization;
+ 	 modified build to target compilation for Java 1.3 as suggested by
+ 	 	Jacob Kjome;
+ 	 adjusted <tt>&lt;p&gt;</tt> tag-balancing suggested by Jacob Kjome;
+ 	 and
+ 	 fixed issues 1723287, 1746732, and 1790414.
+ <dt>Version 0.9.5 (18 Jun 2005)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.9.5.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.9.5.tar.gz'>tgz</a>]
+ <dd>Added feature submitted by Asgeir Asgeirsson to allow scanner to fix 
+       character entity references for Microsoft Windows&reg; characters;
+     stopped building nekohtmlXni.jar file by default;
+     fixed handling of &lt;blockquote> reported by Joseph Walton
+       to better match browser behavior;
+     fixed tag-balancing bug for unknown elements reported by Marc
+       Guillemot and Vadim Tashlikovich;
+     fixed mapping of encoding name in <code>&lt;meta&gt;</code> element
+       reported by Marc Guillemot;
+     changed tag-balancing to allow headers inside of links suggested
+       by Laurens Fridael;
+     applied attribute namespace patch from Joseph Walton;
+     fixed namespace bug for "xml" prefixes reported by Asgeir
+       Asgeirsson;
+     fixed namespace bug for "xmlns" prefixes reported by
+       Johannes Koch;
+     and
+     fixed no-such-method exception bug when using augmentations feature
+       with older versions of Xerces2 reported by Hans Donner.
+ <dt>Version 0.9.4 (17 Nov 2004)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.9.4.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.9.4.tar.gz'>tgz</a>]
+ <dd>Fixed typo in proviso 5 of the license agreement; 
+     added features to strip CDATA delimiters (i.e. "&lt;![CDATA[" and
+       "]]>") from &lt;script> and &lt;style> elements suggested by Dan Sojka;
+     fixed tag-balancing problem reported by Egor Samarkhanov;
+     applied augmentations patches donated by Marc-Andr� Morissette;
+     implemented augmentation performance enhancements inspired by
+       Marc-Andr� Morissette;
+     fixed ignore-outside-content bug reported by Chris Erskine;
+     and
+     updated link to Xerces download site.
+ <dt>Version 0.9.3 (30 Jun 2004)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.9.3.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.9.3.tar.gz'>tgz</a>]
+ <dd>Implemented scanning of XML declaration;
+     fixed &lt;script&gt; tag scanning bug reported by Vasiliev Ivan;
+     added <code>Version</code> class and manifest entries to query 
+       product information;
+     and fixed some Javadoc errors.
+ <dt>Version 0.9.2 (31 Mar 2004)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.9.2.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.9.2.tar.gz'>tgz</a>]
+ <dd>Fixed entity reference scanning and tag-balancing bugs identified 
+       by Tommy Sandstr�m;
+     fixed tag-balancing bug reported by Oliver Pfeiffer;
+     fixed doctype scanning bug reported by Jonathan Baxter;
+     updated Purifier filter to synthesize missing namespace bindings;
+     updated Writer filter to convert all known characters back to 
+       their entity names;
+     and
+     updated implementation to work with Xerces-J 2.6.2 that removed 
+       the <code>ObjectFactory</code> class in the 
+       <code>org.apache.xerces.util</code> package.
+ <dt>Version 0.9.1 (24 Feb 2004)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.9.1.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.9.1.tar.gz'>tgz</a>]
+ <dd>Fixed namespace binding bug reported by Jonathan Baxter.
+ <dt>Version 0.9 (19 Feb 2004)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.9.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.9.tar.gz'>tgz</a>]
+ <dd>Implemented scanning of CDATA sections;
+     implemented namespace processing;
+     added features to 
+       override namespace bindings,
+       insert namespace bindings if not present,
+       override doctype public and system identifiers, and
+       insert doctype declaration if not present;
+     added a filter to allow applications to "purify" the input, ensuring
+       that the output is well-formed XML;
+     added missing location augmentations from document type declaration
+       callback;
+     fixed newline scanning bugs reported by Jonathan Baxter;
+     and
+     fixed comment scanning bugs and infinite loop bug caused by extremely
+       long element and attribute names found by Ram Subbaroyan.
+ <dt>Version 0.8.3 (12 Dec 2003)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.8.3.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.8.3.tar.gz'>tgz</a>]
+ <dd>Fixed null pointer exception for &lt;frameset&gt; tags reported by
+       Dawid Weiss;
+     and
+     added missing file to xercesMinimal.jar file reported by Brent Beardsley.
+ <dt>Version 0.8.2 (14 Nov 2003)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.8.2.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.8.2.tar.gz'>tgz</a>]
+ <dd>Fixed array index out of bounds exception in special tags and
+       doctype scanning bug reported by Leo Galambos;
+     updated processing instruction scanning to handle weird PIs exported
+       from Microsoft products as reported by Gabriele Bulfon;
+     fixed erroneous reporting of missing whitespace before attributes
+       reported by Arno Schatz;
+     installed a default error handler that prints to standard error
+       suggested by Arno Schatz;
+     and
+     fixed handling of dangling &lt;/p&gt; reported by Gopi Murthy to
+       better match browser behavior.
+ <dt>Version 0.8.1 (30 Sep 2003)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.8.1.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.8.1.tar.gz'>tgz</a>]
+ <dd>Fixed bug reported by Yuan Ji that allowed multiple &lt;html&gt; tags;
+     fixed bug in stripping leading comments in &lt;script&gt; tags 
+       as reported by Lawrence McCartin;
+     added feature to be able to strip HTML comment delimiters (i.e. "&lt;!--" 
+       and "--&gt;") from &lt;style&gt; element content suggested by
+       Lawrence McCartin;
+     updated DOMParser to work around a bug in the Xerces HTML DOM
+       implementation when a doctype node was inserted into the document,
+       reported by Troy Waldrep;
+     updated the DOMFragmentParser to allow setting of features and
+       properties as requested by Paul Reeves;
+     changed the status of the document fragment parser from experimental
+       to <font color=green>supported</font>;
+     added feature to allow application to ignore a character encoding
+       specified in a &lt;meta http-equiv='Content-Type' 
+       content='text/html;charset=...'&gt; tag requested by Roger Fullerton;
+     and
+     changed feature identifier for document fragment tag balancing to
+       be more in line with other features (but retained old feature
+       identifier for backwards compatibility).
+ <dt>Version 0.8 (05 Aug 2003)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.8.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.8.tar.gz'>tgz</a>]
+ <dd>Implemented scanning of doctype declaration;
+     implemented non-normalized attribute value for XNI filters that want
+       to know original attribute value;
+     fixed bug scanning entity references inside of unquoted attributes;
+     fixed line counting bug in attribute values reported by Arno Schatz;
+     and
+     updated files in xercesMinimal.jar noted by Brent Beardsley.
+ <dt>Version 0.7.7 (25 Jun 2003)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.7.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.7.tar.gz'>tgz</a>]
+ <dd>Fixed handling of &lt;font&gt; tags reported by Dave King;
+     fixed bugs that caused multiple &lt;head&gt; and &lt;body&gt; tags
+       as reported by Mike Bowler;
+     fixed missing &lt;tr&gt; bug in nested tables reported by Troy Waldrep;
+     and
+     normalized newlines in attribute values to spaces.
+ <dt>Version 0.7.6 (06 May 2003)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.6.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.6.tar.gz'>tgz</a>]
+ <dd>Fixed infinite loop in special tags reported by Mike Bowler.
+ <dt>Version 0.7.5 (02 May 2003)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.5.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.5.tar.gz'>tgz</a>]
+ <dd>Fixed parsing of entity reference within &lt;textarea&gt; tags reported
+       by Mattias Jiderhamn;
+     changed behavior of tag balancer to not consume content after the end
+       &lt;body&gt; and &lt;html&gt; tags but retained old behavior through
+       new feature;
+     fixed &lt;noscript&gt; bug reported by Takashi Tomokiyo;
+     and
+     updated implementation for XNI changes introduced in Xerces-J 2.4.0.
+ <dt>Version 0.7.4 (03 Mar 2003)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.4.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.4.tar.gz'>tgz</a>]
+ <dd>Fixed &lt;form&gt; element balancing problem reported by Dan Rocco;
+     fixed null pointer exception reported by Michael Dynin that was
+       caused by a null XMLResourceIdentifier object passed to the 
+       startGeneralEntity method in the Xerces DOM parser classes;
+     fixed handling of &lt;font&gt; element as requested by Arno Schatz
+       to better match current browsers;
+     replaced generic catch exception blocks with explicit catch blocks
+       suggested by Arno Schatz;
+     fixed &lt;center&gt; tag-balancing problem reported by Russell Gold;
+     fixed null pointer exception caused by null namespace context
+       object passed to Xerces SAX parser class reported by David Leslie;
+     and
+     added FAQ entry describing how to insert custom filters before
+       the tag-balancer.
+ <dt>Version 0.7.3 (28 Jan 2003)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.3.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.3.tar.gz'>tgz</a>]
+ <dd>Updated implementation for XNI changes introduced in Xerces-J 2.3.0;
+     and
+     fixed hack string to accommodate XML4J build of Xerces included in
+       the Eclipse editor reported by Geoffrey Longman.
+ <dt>Version 0.7.2 (10 Jan 2003)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.2.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.2.tar.gz'>tgz</a>]
+ <dd>Fixed class-cast exception bug in DOMFragmentParser reported by
+       Joseph Artsimovich;
+     fixed &lt;span&gt; tag-balancing bug reported by Ron Cemer;
+     and
+     fixed handling of form tags missing a parent element reported by 
+       Russell Gold in order to better match browser behavior.
+ <dt>Version 0.7.1 (06 Dec 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.1.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.1.tar.gz'>tgz</a>]
+ <dd>Fixed null pointer exception caused by null attributes object
+       passed to Xerces SAX parser class as reported by Kevin Huber;
+     and
+     fixed infinite loop condition when encountering "&lt;/html[eof]"
+       as reported by Matt Hurst.
+ <dt>Version 0.7 (27 Nov 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.7.tar.gz'>tgz</a>]
+ <dd>Changed behavior of tag balancer for unbalanced elements
+       as requested by Troy Waldrep to make output match that
+       produced by browsers such as Mozilla;
+     fixed other tag balancing problems identified by a bug
+       reported by Laurens Fridael;
+     added <font color='red'>experimental</font> HTML fragment 
+       parsing feature and DOM fragment parser class;
+     fixed buffer boundary bug in skipMarkup method reported
+       by Mike Bowler;
+     added constructor to the Writer filter that accepts a
+       Java writer object parameter as requested by Alain
+       Gilbert;
+     fixed HTMLScanner class so that it can compile with JDK 1.1
+       as reported by Mikko Honkala;
+     and
+     fixed bug reported by Russell Gold that would ignore
+       the &lt;param&gt; element within an &lt;applet&gt;
+       element.
+ <dt>Version 0.6.8 (30 Sep 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.8.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.8.tar.gz'>tgz</a>]
+ <dd>Implemented scanning of processing instructions;
+     improved performance of HTMLElements#getElement method inspired 
+       by Sam Cheung;
+     changed tag balancer algorithm as requested by Mike Bowler so 
+       that it does not close the &lt;body&gt; element to insert a
+       proper parent element;
+     fixed &lt;isindex&gt; proper parent bug and &lt;script&gt; empty 
+       element tag bug reported by Mike Bowler;
+     fixed bug reported by YingLCS that a &lt;form&gt; tag
+       would prematurely close a &lt;p&gt; tag;
+     and
+     updated implementation for XNI changes introduced in Xerces-J 2.2.0.
+ <dt>Version 0.6.7 (06 Sep 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.7.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.7.tar.gz'>tgz</a>]
+ <dd>Added a FAQ section;
+     and
+     updated implementation for XNI changes introduced in Xerces-J 2.1.0.
+ <dt>Version 0.6.6 (25 Aug 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.6.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.6.tar.gz'>tgz</a>]
+ <dd>Changed packaging to include product name and version in
+       directory name;
+     updated <code>HTMLConfiguration</code> to implement the
+       <code>XMLPullParserConfiguration</code> interface;
+     fixed bug reported by Martin Jericho to correct handling
+       of &lt;col&gt; element;
+     fixed bug reported by Dave King that would skip to end of 
+       document if bad markup was found;
+     fixed numerous bugs related to scanning &lt;script&gt; tags
+       reported by Sam Cheung;
+     added feature to be able to strip HTML comment delimiters (i.e.
+       "&lt;!--" and "--&gt;") from &lt;script&gt; element content;
+     changed the status of the feature to dynamically insert 
+       content from <em>experimental</em> to <font color=green>
+       supported</font>;
+     added code to be able to compare test files against canonical
+       output for regression testing;
+     and
+     fixed minor bugs found by the tests.     
+ <dt>Version 0.6.5 (17 Jul 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.5.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.5.tar.gz'>tgz</a>]
+ <dd> Fixed bug in changing character encoding when "charset=..." is
+        not written in lowercase;
+      and
+      mark attributes as "specified".
+ <dt>Version 0.6.4 (15 Jun 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.4.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.4.tar.gz'>tgz</a>]
+ <dd>Re-organized package contents for integration into the CyberNeko
+       Tools for XNI package;
+     fixed table closing bug reported by Oskar Liljeblad;
+     fixed newline bug reported by OtisG;
+     and
+     fixed line counting bug reported by Donald Ball.
+ <dt>Version 0.6.3 (29 May 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.3.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.3.tar.gz'>tgz</a>]
+ <dd>Fixed bug in handling of &lt;th&gt; elements reported by
+       Oskar Liljeblad;
+     and
+     fixed various tag-balancing problems.
+ <dt>Version 0.6.2 (26 May 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.2.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.2.tar.gz'>tgz</a>]
+ <dd>Changed scanner behavior as requested by Alexey Shananin to 
+       report malformed start elements (e.g. &lt;...&gt;) as 
+       characters 
+     and
+     fixed tag balancing bug introduced in previous version. Oops!
+ <dt>Version 0.6.1 (23 May 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.1.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.1.tar.gz'>tgz</a>]
+ <dd>Changed tag balancer behavior to swallow events after the close 
+       of the &lt;html&gt; tag to ensure that the document stream 
+       remains well-formed;
+     added additional Ruby elements;
+     and
+     improved tag balancer performance.
+ <dt>Version 0.6 (12 May 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.6.tar.gz'>tgz</a>]
+ <dd>Added property to allow custom document filters to be appended
+       to the default NekoHTML parser pipeline;
+     added convenience filters for serializing HTML documents and
+       removing elements from the document event stream;
+     added samples to demonstrate the filtering feature;
+     added <font color=red>experimental</font> functionality to
+       allow applications to dynamically insert content into the
+       HTML document stream;
+     added a minimal Xerces2 Jar file containing just the files
+       required for using the HTMLConfiguration class directly to
+       alleviate full dependence on Xerces2 distribution;
+     applied patch from Serge Proskuryakov to fix handling of 
+       misplaced &lt;title&gt; within &lt;body&gt;;
+     fixed minor tag balancing bug;
+     and
+     re-organized and added new documentation.
+ <dt>Version 0.5 (07 May 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.5.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.5.tar.gz'>tgz</a>]
+ <dd>Fixed some location reporting information bugs and added 
+       feature to report character boundaries of events via the
+       associated augmentations object;
+     added feature to disable tag balancing;
+     and
+     added features to notify handlers of start and end of character
+       and built-in XML and HTML entity references.
+ <dt>Version 0.4.1 (03 May 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.4.1.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.4.1.tar.gz'>tgz</a>]
+ <dd>Fixed some unquoted attribute value scanning bugs reported
+       by Xiaowei Jiang;
+     fixed hack for Xerces-J 2.0.1 reported by Ron Cemer;
+     now passing locator object to <code>startDocument</code>
+       method;
+     and
+     celebrated opening of the Spider-Man movie.
+ <dt>Version 0.4 (14 Apr 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.4.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.4.tar.gz'>tgz</a>]
+ <dd>Added properties to control case of element and attribute names;
+     changed behavior of parser so that only known HTML elements
+       have their names modified according to the properties &mdash; all
+       unknown tags are left as-is;
+     added property to set default encoding;
+     added feature to augment infoset to report "synthesized" events;
+     added feature to be able to report errors and localized the error
+       messages;
+     implemented the locator so that location information can be
+     reported;
+     and
+     fixed element information so that more elements are properly
+     scanned as "special".
+ <dt>Version 0.3.3 (02 Apr 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.3.3.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.3.3.tar.gz'>tgz</a>]
+ <dd>Separated <tt>META-INF/services/*</tt> files to separate Jar
+     so that HTML parser configuration selection can be controlled 
+     more explicitly; added DOM and SAX parser classes for 
+     convenience; and fixed bug so that parser now obeys the
+     encoding specified in the input source.
+ <dt>Version 0.3.2 (15 Mar 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.3.2.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.3.2.tar.gz'>tgz</a>]
+ <dd>Fixed problem with bare &lt;input&gt; elements appearing outside
+     of &lt;form&gt; tag.
+ <dt>Version 0.3.1 (07 Mar 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.3.1.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.3.1.tar.gz'>tgz</a>]
+ <dd>Fixed handling of bare ampersands in content and attribute
+     values.
+ <dt>Version 0.3 (25 Feb 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.3.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.3.tar.gz'>tgz</a>]
+ <dd>Changed license to an Apache style license and fixed a
+     few bugs.
+ <dt>Version 0.2.3 (19 Feb 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.2.3.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.2.3.tar.gz'>tgz</a>]
+ <dd>Nested tables bug fix.
+ <dt>Version 0.2.2 (17 Feb 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.2.2.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.2.2.tar.gz'>tgz</a>]
+ <dd>More bug fixes to allow the parser to be used with Xalan
+     2.3.0. The parser wasn't keeping track of features and
+     properties and without namespaces turned on, Xalan would
+     not correctly transform the SAX events emitted using 
+     NekoHTML.
+ <dt>Version 0.2.1 (16 Feb 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.2.1.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.2.1.tar.gz'>tgz</a>]
+ <dd>Minor bug fix to work around problem in Xerces-J 2.0.0 SAX 
+     parser that drops attributes when parser configuration 
+     doesn't have a symbol table.
+ <dt>Version 0.2 (14 Feb 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.2.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.2.tar.gz'>tgz</a>]
+ <dd>Adding support for UTF-8, UTF-16, and other 8-bit encodings
+     supported by Java.
+ <dt>Version 0.1 (04 Feb 2002)
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.1.zip'>zip</a>]
+     [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-0.1.tar.gz'>tgz</a>]
+ <dd>Initial writing.
+</dl>
+
+<div class='copyright'>
+(C) Copyright 2002-2008, Andy Clark. All rights reserved.
+</div>

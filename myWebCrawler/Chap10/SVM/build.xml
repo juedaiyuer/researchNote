@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="svm" default="makeJAR" basedir=".">
+  <description>
+    Build file for svm classify
+  </description>
+
+  <!-- set global properties for this build -->
+  <property name="product" value="svm"/>
+  <property name="src"     location="src"/>
+  <property name="bin"     location="bin"/>
+  <property name="dist"    location="dist"/>
+  <property name="lib"     location="lib"/>
+  <property name="jarfile" value="${product}.jar"/>
+
+  <path id="project.class.path">
+    <pathelement path="${java.class.path}/"/>
+  	<fileset dir="${lib}">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="init" depends="clean">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${bin}" />
+    <mkdir dir="${dist}" />
+  </target>
+
+  <target name="compile" depends="init"
+    description="compile the source ">
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac debug="true" srcdir="${src}" destdir="${bin}" classpathref="project.class.path" target="1.5" source="1.5"/>
+  </target>
+
+  <target name="clean" description="removes temp stuff">
+    <tstamp/>
+  	<delete dir="${bin}"/>
+ 	  <delete dir="${dist}"/>
+  </target>
+
+  <target name="makeJAR" depends="init,compile">
+  	<jar destfile="${dist}/${jarfile}">
+      <fileset dir="${bin}">
+      	<include name="**/*.class"/>
+        <exclude name="**/*.jflex"/>
+	  </fileset>
+      <fileset dir="${src}">
+      	<include name="**/**"/>
+        <exclude name="**/.svn/**"/>
+        <exclude name="**/Thumbs.db"/>
+        <exclude name="**/*.psd"/>
+        <exclude name="**/*.java"/>
+        <exclude name="**/*.jflex"/>
+  	  </fileset>
+    </jar>
+  </target>
+
+</project>

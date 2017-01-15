@@ -1,0 +1,115 @@
+<title>NekoHTML</title>
+<link rel=stylesheet type=text/css href=style.css>
+
+<h1>CyberNeko HTML Parser <sub>1.9.7</sub></h1>
+<div class='navbar'>
+[
+Top
+|
+<a href='usage.html'>Usage</a>
+|
+<a href='settings.html'>Settings</a>
+|
+<a href='filters.html'>Filters</a>
+|
+<a href='javadoc/index.html'>JavaDoc</a>
+|
+<a href='faq.html'>FAQ</a>
+|
+<a href='software.html'>Software</a>
+|
+<a href='changes.html'>Changes</a>
+]
+</div>
+
+<h2>About</h2>
+<p>
+NekoHTML is a simple <a href='http://www.w3.org/TR/html4/'>HTML</a>
+scanner and tag balancer that enables application programmers to 
+parse HTML documents and access the information using standard XML 
+interfaces. The parser can scan HTML files and "fix up" many common 
+mistakes that human (and computer) authors make in writing HTML 
+documents. NekoHTML adds missing parent elements; automatically 
+closes elements with optional end tags; and can handle mismatched 
+inline element tags.
+<p>
+NekoHTML is written using the 
+<a href='http://xerces.apache.org/xerces2-j/xni.html'>Xerces 
+Native Interface</a> (XNI) that is the foundation of the 
+<a href='http://xerces.apache.org/xerces2-j/'>Xerces2</a> 
+implementation. This enables you to use the NekoHTML parser
+with existing XNI tools without modification or rewriting code.
+
+<h2>License Agreement</h2>
+<p>
+The NekoHTML parser is distributed under the Apache 2.0 license.
+For specific license details, please refer to the 
+<a href='http://apache.org/licenses/LICENSE-2.0.txt'>LICENSE.txt</a> 
+file.
+
+<h2>Download</h2>
+<p>
+The NekoHTML parser includes complete Java source code and 
+documentation. You can download the latest version from the 
+following location:
+<ul>
+<li>NekoHTML 
+    [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-1.9.7.zip'>zip</a>]
+    [<a href='http://downloads.sourceforge.net/nekohtml/nekohtml-1.9.7.tar.gz'>tgz</a>] 
+</ul>
+
+<h2>Requirements and Limitations</h2>
+<p>
+This version of NekoHTML requires the following:
+<ul>
+<li><a href='http://java.sun.com/products/'>Java 1.3</a> (or 
+    higher)
+<li><a href='http://xerces.apache.org/xerces2-j/download.cgi'>Xerces 2.0.0</a>
+    (or higher) 
+    [<a href='http://archive.apache.org/dist/xml/xerces-j/'>archive</a>]
+</ul>
+<p>
+This version has the following limitations:
+<ul>
+<li>There are HTML documents for which NekoHTML cannot properly 
+    generate a well-formed XML document event stream. For example,
+    documents with multiple &lt;html&gt; tags are inherently 
+    ill-formed because XML documents may only have a single root
+    element.
+<li>Code added to the core DOM implementation in Xerces-J 2.0.1
+    introduced a bug in the HTML DOM implementation based on it.
+    The bug causes the element nodes in the resultant HTML document 
+    object to be of type <code>org.apache.xerces.dom.ElementNSImpl</code> 
+    instead of the appropriate HTML DOM element objects. The problem
+    affects NekoHTML users who use the parser with Xerces-J 2.0.1 and
+    anyone using the HTML DOM implementation in Xerces-J 2.0.1.    
+<li>There are no other known major limitations with this release. 
+    However, additional work can always be done to improve 
+    performance, fix bugs, and add functionality.
+</ul>
+
+<h2>More Information</h2>
+<p>
+Questions or comments about the CyberNeko HTML Parser can be posted
+to the appropriate mailing list. The User mailing list is for general 
+parser usage issues and the Developer mailing list is for design
+discussions.
+<table border=0 cellspacing=0 cellpadding=3>
+<tr>
+<th>User mailing list
+<td><a href='http://sourceforge.net/mailarchive/forum.php?forum_name=nekohtml-user'>view</a>
+<td><a href='http://lists.sourceforge.net/mailman/listinfo/nekohtml-user'>join</a>
+<td><a href='mailto:nekohtml-user@lists.sourceforge.net'>post</a>
+<tr>
+<th>Developer mailing list
+<td><a href='http://sourceforge.net/mailarchive/forum.php?forum_name=nekohtml-developer'>view</a>
+<td><a href='http://lists.sourceforge.net/mailman/listinfo/nekohtml-developer'>join</a>
+<td><a href='mailto:nekohtml-developer@lists.sourceforge.net'>post</a>
+</table>
+If you find a problem with NekoHTML, please 
+<a href='http://sourceforge.net/tracker/?func=add&group_id=195122&atid=952178'>file 
+a bug</a>.
+
+<div class='copyright'>
+(C) Copyright 2002-2008, Andy Clark. All rights reserved.
+</div>

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+  HTMLParser Library - A java-based parser for HTML
+  http: htmlparser.org
+  Copyright (C) 2006 Somik Raha
+ 
+  Revision Control Information
+ 
+  $URL: https://svn.sourceforge.net/svnroot/htmlparser/trunk/lexer/src/main/java/org/htmlparser/scanners/package.html $
+  $Author: derrickoswald $
+  $Date: 2006-09-16 10:44:17 -0400 (Sat, 16 Sep 2006) $
+  $Revision: 4 $
+ 
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the Common Public License; either
+  version 1.0 of the License, or (at your option) any later version.
+ 
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  Common Public License for more details.
+ 
+  You should have received a copy of the Common Public License
+  along with this library; if not, the license is available from
+  the Open Source Initiative (OSI) website:
+    http://opensource.org/licenses/cpl1.0.php
+-->
+</head>
+<body bgcolor="white">
+The scanners package contains classes responsible for the tertiary
+identification of tags. The lower level classes in the {@link
+org.htmlparser.lexer.Lexer lexer} package convert
+byte streams to characters and characters to nodes (via the {@link
+org.htmlparser.NodeFactory NodeFactory}). In the case of tags, the
+scanners in this package can then complete the tag or override the current tag
+and return an augmented tag. The existing implementation of the {@link
+org.htmlparser.scanners.CompositeTagScanner composite tag
+scanner}, for example, gathers the children of composite tags, identifying the
+nested structure of HTML documents. The {@link
+org.htmlparser.scanners.ScriptScanner script scanner} overrides the nodes
+returned by the lexer and creates a tag containing a single string that is the
+script code.<br>
+You might need to create a scanner (that implements the
+{@link org.htmlparser.scanners.Scanner Scanner} interface) if
+the text you are trying to parse doesn't look like HTML, as is the case for the
+script scanner, or the normal processing of tags by nesting their structure is
+inadequate.
+</body>
+</html>

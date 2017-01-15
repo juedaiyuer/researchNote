@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+<HEAD>
+<!--
+  HTMLParser Library - A java-based parser for HTML
+  http: htmlparser.org
+  Copyright (C) 2006 Somik Raha
+ 
+  Revision Control Information
+ 
+  $URL: https://svn.sourceforge.net/svnroot/htmlparser/trunk/parser/src/main/java/org/htmlparser/filters/package.html $
+  $Author: derrickoswald $
+  $Date: 2006-09-16 10:44:17 -0400 (Sat, 16 Sep 2006) $
+  $Revision: 4 $
+ 
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the Common Public License; either
+  version 1.0 of the License, or (at your option) any later version.
+ 
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  Common Public License for more details.
+ 
+  You should have received a copy of the Common Public License
+  along with this library; if not, the license is available from
+  the Open Source Initiative (OSI) website:
+    http://opensource.org/licenses/cpl1.0.php
+-->
+<TITLE>Filters Package</TITLE>
+</HEAD>
+<BODY>
+The filters package contains example filters to select only desired nodes.
+For example, to display tags having the "id" attribute, you could use:
+<pre>
+Parser parser = new Parser ("http://yadda");
+parser.parse (new HasAttributeFilter ("id"));
+</pre>
+These filters can be combined to yield powerful extraction capabilities.
+For example, to get a list of links where the contents is an image, you could use:
+<pre>
+NodeList list = new NodeList ();
+NodeFilter filter =
+    new AndFilter (
+        new TagNameFilter ("A"),
+        new HasChildFilter (
+            new TagNameFilter ("IMG")));
+for (NodeIterator e = parser.elements (); e.hasMoreNodes (); )
+    e.nextNode ().collectInto (list, filter);
+</pre>
+</BODY>
+</HTML>

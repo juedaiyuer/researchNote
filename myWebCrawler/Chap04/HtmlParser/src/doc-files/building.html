@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+  <HEAD>
+    <TITLE>How to Build the HTML Parser Libraries</TITLE>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../stylesheet.css" TITLE="Style">
+  </HEAD>
+  <BODY bgcolor="white">
+  <H1>How to Build the HTML Parser libraries</H1>
+  <H2>Java</H2>
+  Set up java. I won't include instructions here, just a link to the
+  <a href="http://java.sun.com/j2se">Sun j2se site</a>. I use version 1.5 (1.5.0_06-b05), and you
+  need a JDK (java development kit), not a JRE (java runtime environment).<p>
+  Test your installation by typing command:<p>
+  <code>javac</code><p>
+  This should display help on the java compiler options.
+  <H2>Maven</H2>
+  Set up maven (maven 2), the Java-based build tool from the 
+  <a href="http://maven.apache.org/">Apache Maven project</a>.
+  Test your installation by typing the command:<p>
+  <code>mvn -help</code><p>
+  This should display help on maven options.
+<!--
+  <H2>Sources</H2>
+  The distribution zip file contains a src.jar file. If you've unpacked the
+  distribution, this file should be in the top level directory you chose.<p>
+  Unjar this file with the command:<p>
+  <code>jar -xf src.jar</code><p>
+  There should now be a pom.xml, build.xml and build.cmd in the top level directory,
+  plus several subdirectories.
+-->
+  <H2>Subversion</H2>
+  The latest sources are only available from the <A href="http://svn.sourceforge.net/viewvc/htmlparser/">Subversion
+  repository</A> on <A href="http://sourceforge.org">Sourceforge</A>.<p>
+  Install the <A href="http://subversion.tigris.org/">Subversion client</A>,
+  change to an appropriate subdirectory and issue the checkout command:
+  <pre>
+      svn co https://svn.sourceforge.net/svnroot/htmlparser htmlparser
+  </pre>
+  If you've never done this before it will ask you to validate the sourceforge subversion server ssl certificate and
+  then proceed to fetch the head revision files (in trunk):
+  <pre>
+A    htmlparser\trunk
+A    htmlparser\trunk\lexer
+A    htmlparser\trunk\lexer\src
+A    htmlparser\trunk\lexer\src\main
+A    htmlparser\trunk\lexer\src\main\java
+A    htmlparser\trunk\lexer\src\main\java\org
+A    htmlparser\trunk\lexer\src\main\java\org\htmlparser
+A    htmlparser\trunk\lexer\src\main\java\org\htmlparser\http
+A    htmlparser\trunk\lexer\src\main\java\org\htmlparser\http\ConnectionMonitor.java
+A    htmlparser\trunk\lexer\src\main\java\org\htmlparser\http\Cookie.java
+...
+A    htmlparser\trunk\parser\pom.xml
+A    htmlparser\trunk\parser\build.xml
+A    htmlparser\trunk\build.xml
+Checked out revision 13.
+  </pre>
+  The head revision number will differ from the example above.<p>
+  The sources are laid out in the <A href="http://apollo.ucalgary.ca/tlcprojectswiki/index.php/Public/Project_Versioning_-_Best_Practices">standard structure</A>:
+  <pre>
+        <source>
+          <b>htmlparser</b>               subversion directory for htmlparser
+            <b>trunk</b>                  directory for head revision
+              pom.xml              main project maven project object model
+              build.xml            generated ant build script
+              build.cmd            helper command file for deployment
+              <b>src</b>                  main project sources
+              <b>lexer</b>                lexer component subdirectory
+              <b>parser</b>               parser component subdirectory
+              <b>filterbuilder</b>        FilterBuilder example application subdirectory
+              <b>sitecapturer</b>         SiteCapturer example application subdirectory
+              <b>thumbelina</b>           Thumbelina example application subdirectory
+            <b>branches</b>               directory for branches
+            <b>tags</b>                   directory for tags
+        </source>
+  </pre>
+  <H2>Building</H2>
+  Each project can be built separately, but to build everything, change to the
+  trunk directory and issue the 'install' target:
+  <pre>
+  $ <B>cd htmlparser/trunk</B>
+  $ <B>mvn install</B>
+  </pre>
+  This generates a 'target' directory for each component/application and installs the
+  built artifacts into your local maven repository:
+  <pre>
+    windows:    C:\Documents and Settings\<i>username</i>\.m2\repository
+    linux:      $home/.m2/repository
+  </pre>
+  To avoid running the unit tests add the maven.test.skip switch to the maven command line:
+  <pre>
+    mvn -Dmaven.test.skip=true ..
+  </pre>
+  To build the distribution components use the site, deploy and assembly:assembly target:
+  <pre>
+  $ <B>mvn -Dmaven.test.skip=true site deploy assembly:assembly</B>
+  </pre>
+  Note that, in this case, the unit tests must be avoided because the stupid surefire plugin with
+  its separate class loader uses the signed jar file for the htmllexer, but not for the htmlparser,
+  leading to an exception like:
+  <pre>
+org.apache.maven.surefire.testset.TestSetFailedException: org.htmlparser.tests.AllTests; nested exception is java.lang.SecurityExcep
+tion: class "org.htmlparser.util.ParserException"'s signer information does not match signer information of other classes in the sam
+e package
+  </pre>
+  In order to sign jar files for the Java web start components you will need to generate a self signing certificate in a keystore:
+<pre>
+<b>keytool -keystore <i>your keystore location</i> -alias <i>your signing key alias</i> -genkey</b>
+Enter keystore password:  <b><i>your keystore password</i></b>
+What is your first and last name?
+  [Unknown]:  <b><i>your full name</i></b>
+What is the name of your organizational unit?
+  [Unknown]:  <b><i>your organizational unit</i></b>
+What is the name of your organization?
+  [Unknown]:  <b><i>your organization</i></b>
+What is the name of your City or Locality?
+  [Unknown]:  <b><i>your city</i></b>
+What is the name of your State or Province?
+  [Unknown]:  <b><i>your state or province</i></b>
+What is the two-letter country code for this unit?
+  [Unknown]:  <b><i>your country code</i></b>
+Is CN=<i>your full name</i>, OU=<i>your organizational unit</i>, O=<i>your organization</i>, L=<i>your city</i>, ST=<i>your state or province</i>, C=<i>your country code</i> correct?
+  [no]:  <b>y</b>
+
+Enter key password for &lt;<i>your signing key alias</i>&gt;
+        (RETURN if same as keystore password): <b><i>your signing key password</i></b>
+
+<b>keytool -keystore <i>your keystore location</i> -alias <i>your signing key alias</i> -selfcert</b>
+Enter keystore password:  <b><i>your keystore password</i></b>
+</pre>
+  You will need to create a settings.xml file in the .m2 directory:
+  <pre>
+    windows:    C:\Documents and Settings\<i>username</i>\.m2\settings.xml
+    linux:      $home/.m2/settings.xml
+  </pre>
+  containing:
+<pre>
+&lt;settings&gt;
+  &lt;activeProfiles&gt;
+    &lt;activeProfile&gt;default&lt;/activeProfile&gt;
+  &lt;/activeProfiles&gt;
+  &lt;profiles&gt;
+    &lt;profile&gt;
+      &lt;id&gt;default&lt;/id&gt;
+      &lt;activation&gt;
+        &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;
+      &lt;/activation&gt;
+      &lt;properties&gt;
+        &lt;keystore.location&gt;<b><i>your keystore location</i></b>&lt;/keystore.location&gt;
+        &lt;keystore.storepass&gt;<b><i>your keystore password</i></b>&lt;/keystore.storepass&gt;
+        &lt;keystore.alias&gt;<b><i>your signing key alias</i></b>&lt;/keystore.alias&gt;
+        &lt;keystore.keypass&gt;<b><i>your signing key password</i></b>&lt;/keystore.keypass&gt;
+      &lt;/properties&gt;
+    &lt;/profile&gt;
+  &lt;/profiles&gt;
+  &lt;servers&gt;
+    &lt;server&gt;
+      &lt;id&gt;sourceforge-snapshot-repository&lt;/id&gt;
+      &lt;username&gt;<b><i>your sourceforge login name</i></b>&lt;/username&gt;
+      &lt;configuration&gt;
+        &lt;sshExecutable&gt;plink&lt;/sshExecutable&gt;
+        &lt;scpExecutable&gt;pscp&lt;/scpExecutable&gt;
+      &lt;/configuration&gt;
+    &lt;/server&gt;
+  &lt;/servers&gt;&lt;/settings&gt;
+</pre>
+  The servers section is only required for the deploy lifecycle, in order to upload to the temporary maven repository using PuTTY tools.
+  The necessary private key is assumed to be loaded into Pagent.
+  </BODY>
+</HTML>

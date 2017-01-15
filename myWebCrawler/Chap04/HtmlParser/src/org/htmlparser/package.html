@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+  HTMLParser Library - A java-based parser for HTML
+  http: htmlparser.org
+  Copyright (C) 2006 Somik Raha
+ 
+  Revision Control Information
+ 
+  $URL: https://svn.sourceforge.net/svnroot/htmlparser/trunk/lexer/src/main/java/org/htmlparser/package.html $
+  $Author: derrickoswald $
+  $Date: 2006-09-16 10:44:17 -0400 (Sat, 16 Sep 2006) $
+  $Revision: 4 $
+ 
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the Common Public License; either
+  version 1.0 of the License, or (at your option) any later version.
+ 
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  Common Public License for more details.
+ 
+  You should have received a copy of the Common Public License
+  along with this library; if not, the license is available from
+  the Open Source Initiative (OSI) website:
+    http://opensource.org/licenses/cpl1.0.php
+-->
+</head>
+<body>
+The basic API classes which will be used by most developers when working with
+the HTML Parser.
+<p>The {@link org.htmlparser.Parser} class is the main high level class that
+provides simplified access to the contents of an HTML page.
+A wide range of methods is available to customize the operation of the Parser,
+as well as access specific pieces of the page as
+{@link org.htmlparser.Node Nodes}.</p>
+<p>The {@link org.htmlparser.NodeFactory} interface specifies the requirements
+for a developer to have the Parser or Lexer generate nodes. Three types of
+nodes are required: {@link org.htmlparser.Text}, {@link org.htmlparser.Remark}
+and {@link org.htmlparser.Tag Tags}. Tags contain lists
+of child nodes and {@link org.htmlparser.Attribute attributes}.</p>
+<p>The only provided implementation of the NodeFactory interface
+is the {@link org.htmlparser.PrototypicalNodeFactory} which
+operates by holding example nodes and cloning them as needed to satisfy the
+requests for nodes by the Parser. By default, a Lexer is it's own NodeFactory,
+returning new {@link org.htmlparser.nodes.TextNode},
+{@link org.htmlparser.nodes.RemarkNode} and undifferentiated
+{@link org.htmlparser.nodes.TagNode Tagnodes} (see the
+{@link org.htmlparser.nodes nodes} package), but when the parser uses a lexer
+it replaces this behaviour with a PrototypicalNodeFactory to return a rich
+set of specific tags (see the {@link org.htmlparser.tags tags} package).</p>
+<p>The {@link org.htmlparser.NodeFilter} interface is used by the filtering
+code to determine if a node meets a certain criteria. Some generic examples of
+filters can be found in the {@link org.htmlparser.filters filters} package.
+</body>
+</html>

@@ -1,0 +1,362 @@
+<title>NekoHTML | Frequently Asked Questions</title>
+<link rel=stylesheet type=text/css href=style.css>
+
+<h1>Frequently Asked Questions</h1>
+<div class='navbar'>
+[
+<a href='index.html'>Top</a>
+|
+<a href='usage.html'>Usage</a>
+|
+<a href='settings.html'>Settings</a>
+|
+<a href='filters.html'>Filters</a>
+|
+<a href='javadoc/index.html'>JavaDoc</a>
+|
+FAQ
+|
+<a href='software.html'>Software</a>
+|
+<a href='changes.html'>Changes</a>
+]
+</div>
+
+<h2>Table of Contents</h2>
+
+<ul>
+<li><a href='#versionup'>Why did the version jump from 0.9.5 to 1.9.6?</a>
+<li><a href='#uppercase'>Why are the DOM element names always uppercase?</a>
+<li><a href='#hierarchy'>Why do I get a hierarchy request error using DOM?</a>
+<li><a href='#prefilter'>How do I add filters <em>before</em> the tag balancer?</a>
+<li><a href='#fragments'>How do I parse HTML document fragments?</a>
+<li><a href='#offsets'>How can I get the location of document information?</a>
+<li><a href='#xerces2'>Do I have to use all of Xerces2?</a>
+<li><a href='#version'>What version of NekoHTML am I using?</a>
+</ul>
+
+<hr>
+
+<a name='versionup'></a>
+<h3>Why did the version jump from 0.9.5 to 1.9.6?</h3>
+
+<p>
+When the NekoHTML project was re-launched on 
+<a href='http://sourceforge.net/projects/nekohtml'>SourceForge</a>,
+the version was changed from 0.9.5 to 1.9.6. The new version marks a
+fresh start for NekoHTML and indicates that the project is mature
+and stable.
+
+<a name='uppercase'></a>
+<h3>Why are the DOM element names always uppercase?</h3>
+
+<p>
+The <a href='http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-html.html'>HTML 
+DOM</a> specification explicitly states that element and
+attribute names follow the semantics, including case-sensitivity,
+specified in the <a href='http://www.w3.org/TR/html4/'>HTML
+4</a> specification.  In addition,
+<a href='http://www.w3.org/TR/html4/about.html#h-1.2.1'>section
+1.2.1</a> of the HTML 4.01 specification states:
+<blockquote>
+Element names are written in uppercase letters (e.g., BODY). 
+Attribute names are written in lowercase letters (e.g., lang, onsubmit). 
+</blockquote>
+<p>
+The Xerces HTML DOM implementation (used by default in the
+NekoHTML <code>DOMParser</code> class) follows this convention.
+Therefore, even if the 
+"http://cyberneko.org/html/properties/names/elems" property is
+set to "lower", the DOM will still uppercase the element names.
+<p>
+To get around this problem, instantiate a Xerces2 <code>DOMParser</code>
+object using the NekoHTML parser configuration. By default, the
+Xerces DOM parser class creates a standard XML DOM tree, not
+an HTML DOM tree. Therefore, the element and attribute names
+will follow the settings for the
+"http://cyberneko.org/html/properties/names/elems" and
+"http://cyberneko.org/html/properties/names/attrs" properties.
+However, realize that the application will not be able to cast
+the document nodes to the HTML DOM interfaces for accessing the 
+document's information.
+<p>
+The following sample code shows how to instantiate a DOM
+parser using the NekoHTML parser configuration:
+<pre class='code'>
+<span class='code-comment'>// import org.apache.xerces.parsers.DOMParser;
+// import org.cyberneko.html.HTMLConfiguration;</span>
+
+DOMParser parser <span class='code-punct'>=</span> <span class='code-keyword'>new</span> DOMParser<span class='code-punct'>(</span><span class='code-keyword'>new</span> HTMLConfiguration<span class='code-punct'>());</span>
+</pre>
+
+<a name='hierarchy'></a>
+<h3>Why do I get a hierarchy request error using DOM?</h3>
+
+<p>
+Using the NekoHTML DOM parser to parse HTML documents with 
+namespace information can result in a hierarchy request error
+to be thrown. For example:
+<blockquote>
+org.w3c.dom.DOMException: HIERARCHY_REQUEST_ERR: An attempt was made 
+to insert a node where it is not permitted.
+</blockquote>
+<p>
+The Xerces HTML DOM implementation does not support namespaces
+and cannot represent XHTML documents with namespace information.
+Therefore, in order to use the default HTML DOM implementation
+with NekoHTML's <code>DOMParser</code> to parse XHTML documents,
+you must turn off namespace processing. For example:
+<pre class='code'>
+<span class='code-comment'>// import org.cyberneko.html.parsers.DOMParser;</span>
+
+DOMParser parser <span class='code-punct'>=</span> <span class='code-keyword'>new</span> DOMParser<span class='code-punct'>();</span>
+parser<span class='code-punct'>.</span><span class='code-func'>setFeature</span><span class='code-punct'>(</span><span class='code-string'>"http://xml.org/sax/features/namespaces"</span><span class='code-punct'>,</class> <span class='code-keyword'>false</span><span class='code-punct'>);</span>
+</pre>
+<p>
+If your application requires namespace processing to be turned
+on <em>and</em> uses the DOM API, another option is to add a
+custom filter to the parsing pipeline to remove namespace
+information before the <code>DOMParser</code> constructs the
+document. For example:
+<pre class='code'>
+<span class='code-comment'>// import org.cyberneko.html.filters.DefaultFilter;
+// import org.cyberneko.html.parsers.DOMParser;
+// import org.apache.xerces.xni.*;
+// import org.apache.xerces.xni.parser.XMLDocumentFilter;</span>
+
+DOMParser parser <span class='code-punct'>=</span> <span class='code-keyword'>new</span> DOMParser<span class='code-punct'>();</span>
+parser<span class='code-punct'>.</span><span class='code-func'>setProperty</span><span class='code-punct'>(</span><span class='code-string'>"http://cyberneko.org/html/properties/filters"</span><span class='code-punct'>,</span> 
+  <span class='code-keyword'>new</span> XMLDocumentFilter<span class='code-punct'>[] {</span> <span class='code-keyword'>new</span> DefaultFilter<span class='code-punct'>() {</span>
+    <span class='code-keyword'>public void</span> <span class='code-func'>startElement</span><span class='code-punct'>(</span>QName element<span class='code-punct'>,</span> XMLAttributes attrs<span class='code-punct'>,</span>
+                             Augmentations augs<span class='code-punct'>)</span> <span class='code-keyword'>throws</span> XNIException <span class='code-punct'>{</span>
+      element<span class='code-punct'>.</span>uri <span class='code-punct'>=</span> <span class='code-keyword'>null</span><span class='code-punct'>;</span>
+      <span class='code-keyword'>super</span><span class='code-punct'>.</span><span class='code-func'>startElement</span><span class='code-punct'>(</span>element<span class='code-punct'>,</span> attrs<span class='code-punct'>,</span> augs<span class='code-punct'>);</span>
+    <span class='code-punct'>}</span>
+    <span class='code-comment'>// ...etc...</span>
+  <span class='code-punct'>}
+});</span>
+</pre>
+
+<a name='prefilter'></a>
+<h3>How do I add filters <em>before</em> the tag balancer?</h3>
+
+<p>
+The NekoHTML parser has a property that allows you to append 
+custom filter components at the end of the parser pipeline as 
+detailed in the <a href='filters.html'>Pipeline Filters</a> 
+documentation. But this means that processing occurs 
+<em>after</em> the tag-balancer does its job. However, the same 
+property can also be used to insert custom components before 
+the tag-balancer as well.
+<p>
+The secret is to <em>disable</em> the tag-balancing feature and 
+then add another instance of the <code>HTMLTagBalancer</code> 
+component at the end of your custom filter pipeline. The following
+example shows how to add a custom filter before the tag-balancer
+in the DOM parser. (This also works on all other types of parsers
+that use the <code>HTMLConfiguration</code>.)
+<pre class='code'>
+<span class='code-comment'>// import org.cyberneko.html.HTMLConfiguration;
+// import org.cyberneko.html.parsers.DOMParser;
+// import org.apache.xerces.xni.parser.XMLDocumentFilter;</span>
+
+DOMParser parser <span class='code-punct'>=</span> <span class='code-keyword'>new</span> DOMParser<span class='code-punct'>();</span>
+parser<span class='code-punct'>.</span><span class='code-func'>setFeature</span><span class='code-punct'>(</span><span class='code-string'>"http://cyberneko.org/html/features/balance-tags"</span><span class='code-punct'>,</span> <span class='code-keyword'>false</span><span class='code-punct'>);</span>
+XMLDocumentFilter<span class='code-punct'>[]</span> filters <span class='code-punct'>= {</span> <span class='code-keyword'>new</span> MyFilter<span class='code-punct'>(),</span> <span class='code-keyword'>new</span> HTMLTagBalancer<span class='code-punct'>() };</span>
+parser<span class='code-punct'>.</span><span class='code-func'>setProperty</span><span class='code-punct'>(</span><span class='code-string'>"http://cyberneko.org/html/properties/filters"</span><span class='code-punct'>,</span> filters<span class='code-punct'>);</span>
+</pre>
+
+<a name='fragments'></a>
+<h3>How do I parse HTML document fragments?</h3>
+
+<p>
+Frequently, HTML is used within applications and online forms
+to allow users to enter rich-text. In these situations, it is
+useful to be able to parse the entered text as a document
+<i>fragment</i>. In other words, the entered text represents
+content within the HTML &lt;body&gt; element &mdash; it is
+<em>not</em> a full HTML document.
+<p>
+Starting with version 0.7.0, NekoHTML has added a feature that 
+allows the application to parse HTML document fragments. Setting 
+the "<code>http://cyberneko.org/html/features/balance-tags/document-fragment</code>" 
+feature to <code>true</code> instructs the tag-balancer to 
+balance only tags found within the HTML &lt;body&gt; element. 
+The surrounding &lt;body&gt; and &lt;html&gt; elements are not
+inserted.
+<p>
+<strong>Note:</strong>
+The document-fragment feature should <strong>not</strong> be
+used on the <code>DOMParser</code> class since it relies on
+balanced elements in order to correctly construct the DOM
+tree. However, a new parser class has been added to NekoHTML
+to allow you parser DOM document fragments. Please refer to
+the <a href='usage.html#convenience'>Usage Instructions</a>
+for more information.
+
+<a name='offsets'></a>
+<h3>How can I get the location of document information?</h3>
+
+<p>
+Many applications are interested in knowing where elements,
+attributes, and character data appear within the source
+document. To aid these applications, NekoHTML has a feature
+that reports the starting and ending character offsets of
+each piece of information in the document.
+<p>
+In order to tell NekoHTML to report the character offsets
+for document information, the 
+<a href='settings.html#augmentations'>augmentations</a>
+feature needs to be turned on. For example:
+<p>
+<pre class='code'>
+<span class='code-comment'>// import org.cyberneko.html.parsers.SAXParser;</span>
+
+String AUGMENTATIONS <span class='code-punct'>=</span> <span class='code-string'>"http://cyberneko.org/html/features/augmentations"</span><span class='code-punct'>;</span>
+
+SAXParser parser <span class='code-punct'>=</span> <span class='code-keyword'>new</span> <span class='code-func'>SAXParser</span><span class='code-punct'>();</span>
+parser<span class='code-punct'>.</span><span class='code-func'>setFeature</span><span class='code-punct'>(</span>AUGMENTATIONS<span class='code-punct'>,</span> <span class='code-keyword'>true</span><span class='code-punct'>);</span>
+</pre>
+<p>
+Once the feature is enabled, the location information can be
+obtained by querying the 
+<code><a href='javadoc/org/cyberneko/html/HTMLEventInfo.html'>HTMLEventInfo</a></code> 
+object in the <code>Augmentations</code> parameter passed to
+all XNI callbacks. This dependency is required because DOM
+and SAX lack the ability to communicate this detailed 
+information to the application.
+<p>
+The XNI dependence does not restrict applications to only
+using the Xerces Native Interface, however. The best way to
+use this information is by extending one of the parsers in the
+<code>org.cyberneko.html.parsers</code> package and overriding
+the methods of interest. The following example extends the
+<code>SAXParser</code> class to retrieve the event information
+for start elements:
+<p>
+<pre class='code'>
+<span class='code-keyword'>public class</span> MySAXParser <span class='code-keyword'>extends</span> SAXParser <span class='code-punct'>{</span>
+
+    <span class='code-keyword'>static final</span> String AUGMENTATIONS <span class='code-punct'>=</span>
+        <span class='code-string'>"http://cyberneko.org/html/features/augmentations"</span><span class='code-punct'>;</span>
+
+    <span class='code-keyword'>public</span> <span class='code-func'>MySAXParser</span><span class='code-punct'>() {</span>
+        <span class='code-func'>setFeature</span><span class='code-punct'>(</span>AUGMENTATIONS<span class='code-punct'>,</span> <span class='code-keyword'>true</span><span class='code-punct'>);
+    }</span>
+
+    <span class='code-keyword'>public void</span> <span class='code-func'>startElement</span><span class='code-punct'>(</span>QName element<span class='code-punct'>,</span> XMLAttributes attrs<span class='code-punct'>,</span>
+                             Augmentations augs<span class='code-punct'>)</span> <span class='code-keyword'>throws</span> XNIException <span class='code-punct'>{</span>
+
+        <span class='code-comment'>// get offset information</span>
+        HTMLEventInfo info <span class='code-punct'>=
+           (</span>HTMLEventInfo<span class='code-punct'>)</span>augs<span class='code-punct'>.</span><span class='code-func'>getItem</span><span class='code-punct'>(</span>AUGMENTATIONS<span class='code-punct'>);</span>
+
+        <span class='code-keyword'>boolean</span> synthesized <span class='code-punct'>=</span> info<span class='code-punct'>.</span><span class='code-func'>isSynthesized</span><span class='code-punct'>();</span>
+        <span class='code-keyword'>int</span> beginRow <span class='code-punct'>=</span> info<span class='code-punct'>.</span><span class='code-func'>getBeginLineNumber</span><span class='code-punct'>();</span>
+        <span class='code-keyword'>int</span> beginCol <span class='code-punct'>=</span> info<span class='code-punct'>.</span><span class='code-func'>getBeginColumnNumber</span><span class='code-punct'>();</span>
+        <span class='code-keyword'>int</span> endRow <span class='code-punct'>=</span> info<span class='code-punct'>.</span><span class='code-func'>getEndLineNumber</span><span class='code-punct'>();</span>
+        <span class='code-keyword'>int</span> endCol <span class='code-punct'>=</span> info<span class='code-punct'>.</span><span class='code-func'>getEndColumnNumber</span><span class='code-punct'>();</span>
+
+        <span class='code-comment'>// perform default processing</span>
+        <span class='code-keyword'>super</span><span class='code-punct'>.</span><span class='code-func'>startElement</span><span class='code-punct'>(</span>element<span class='code-punct'>,</span> attrs<span class='code-punct'>,</span> augs<span class='code-punct'>);
+    }
+
+}</span>
+</pre>
+<p>
+<strong>Note:</strong>
+The NekoHTML parser reports character offsets and is unable 
+to report the byte offsets that map to the resulting characters.
+The parser takes advantage of the character decoders present in
+the JVM which do not report byte offsets. And because these
+decoders buffer blocks of bytes internally for performance
+reasons, it is not possible to write a custom input stream to
+perform this mapping between byte and character offsets. If you
+control the source documents and can restrict them to a single
+character encoding, then writing a custom reader to perform 
+this mapping is more feasible.
+<p>
+<strong>Note:</strong>
+Currently, only the start and end row and column information
+can be queried. In the future, NekoHTML will be able
+to report character offsets from the beginning of the file.
+This does not, however, mean that byte offsets will also be
+supported at a future date.
+
+<a name='xerces2'></a>
+<h3>Do I have to use all of Xerces2?</h3>
+
+<p>
+While NekoHTML is a rather small library, many users complain
+about the size of the Xerces2 library. However, the full
+Xerces2 library is <em>not</em> required in order to use the
+NekoHTML parser. Because the CyberNeko HTML parser is written 
+using the Xerces Native Interface (XNI) framework that forms 
+the foundation of the Xerces2 implementation, only that part
+is required to write applications using NekoHTML.
+<p>
+For convenience, a small Jar file containing only the necessary 
+parts of the framework and utility classes from Xerces2 is
+distributed with the NekoHTML package. The Jar file, called
+<code>xercesMinimal.jar</code>, can be found in the
+<code>lib/</code> directory of the distribution. Simply add
+this file to your classpath along with <code>nekohtml.jar</code>.
+<p>
+However, there are a few restrictions if you choose to use
+the <code>xercesMinimal.jar</code> file instead of the full
+Xerces2 package. First, you cannot use the DOM and SAX parsers
+included with NekoHTML because they use the Xerces2 base
+classes. Second, because you cannot use the convenience
+parser classes, your application must be written using the
+XNI framework. However, using the XNI framework is not 
+difficult for programmers familiar with SAX. [Note: future 
+versions of NekoHTML may include custom implementations of
+the DOM and SAX parsers to avoid this dependence on the 
+Xerces2 library.]
+<p>
+Most users of the CyberNeko HTML parser will not have a
+problem including the full Xerces2 package because the
+application is likely to need an XML parser implementation.
+However, for those users that are concerned about Jar file
+size, then using the <code>xercesMinimal.jar</code> file
+may be a useful alternative.
+
+<a name='version'></a>
+<h3>What version of NekoHTML am I using?</h3>
+
+<p>
+Since version 0.9.3, NekoHTML includes a class that can be
+used to query the product version within application code. 
+The <code>Version</code> class in the
+<code>org.cyberneko.html</code> package contains a method,
+<code>getVersion</code> that returns the NekoHTML version
+as a string. For example:
+<pre class='code'>
+<span class='code-comment'>// import org.cyberneko.html.Version;</span>
+
+System<span class='code-punct'>.</span>err<span class='code-punct'>.</span><span class='code-func'>println</span><span class='code-punct'>(</span>Version<span class='code-punct'>.</span><span class='code-func'>getVersion</span><span class='code-punct'>());</span>
+</pre>
+<p>
+The <code>Version</code> also includes a <code>main</code> 
+method that prints the version information to standard output.
+<p>
+The version and product information can also be queried using
+the Java package API. For example:
+<pre class='code'>
+Class cls <span class='code-punct'>=</span> Class<span class='code-punct'>.</span><span class='code-func'>forName</span><span class='code-punct'>(</span><span class='code-string'>"org.cyberneko.html.HTMLConfiguration"</span><span class='code-punct'>);</span>
+Package pkg <span class='code-punct'>=</span> cls<span class='code-punct'>.</span><span class='code-func'>getPackage</span><span class='code-punct'>();</span>
+
+String name <span class='code-punct'>=</span> pkg<span class='code-punct'>.</span><span class='code-func'>getName</span><span class='code-punct'>();</span>
+
+String specTitle   <span class='code-punct'>=</span> pkg<span class='code-punct'>.</span><span class='code-func'>getSpecificationTitle</span><span class='code-punct'>();</span>
+String specVendor  <span class='code-punct'>=</span> pkg<span class='code-punct'>.</span><span class='code-func'>getSpecificationVendor</span><span class='code-punct'>();</span>
+String specVersion <span class='code-punct'>=</span> pkg<span class='code-punct'>.</span><span class='code-func'>getSpecificationVersion</span><span class='code-punct'>();</span>
+
+String implTitle   <span class='code-punct'>=</span> pkg<span class='code-punct'>.</span><span class='code-func'>getImplementationTitle</span><span class='code-punct'>();</span>
+String implVendor  <span class='code-punct'>=</span> pkg<span class='code-punct'>.</span><span class='code-func'>getImplementationVendor</span><span class='code-punct'>();</span>
+String implVersion <span class='code-punct'>=</span> pkg<span class='code-punct'>.</span><span class='code-func'>getImplementationVersion</span><span class='code-punct'>();</span>
+</pre>
+
+<div class='copyright'>
+(C) Copyright 2002-2008, Andy Clark. All rights reserved.
+</div>

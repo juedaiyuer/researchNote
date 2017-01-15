@@ -1,0 +1,342 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project default='all' basedir='.' xmlns:artifact="urn:maven-artifact-ant">
+
+ <!-- PROPERTIES -->
+ <property file='build-custom.properties' />
+ 
+ <property name='version'   value='1.9.7'/>
+ <property name='name'      value='nekohtml'/>
+ <property name='fullname'  value='${name}-${version}'/>
+ <property name='Title'     value='NekoHTML'/>
+ <property name='FullTitle' value='CyberNeko HTML Parser'/>
+ <property name='Name'      value='${Title} ${version}'/>
+ <property name='author'    value='Andy Clark'/>
+ <property name='copyright' value='(C) Copyright 2002-2008, ${author}. All rights reserved.'/>
+ <property name='URL'       value='http://nekohtml.sourceforge.net/index.html'/>
+ 
+ <property name='compile.source' value='1.3' />
+ <property name='compile.target' value='1.3' />
+  
+ <property name='src.dir'           value='src' />
+ <property name='src.test.dir'      value='test/java' />
+ <property name='doc.dir'           value='doc' />
+ <property name='data.dir'          value='data' />
+ <property name='lib.dir'           value='lib' />
+ <property name='build.dir'         value='build' />
+ <property name='build.classes.dir' value='${build.dir}/classes' />
+ <property name='build.test-classes.dir' value='${build.dir}/test-classes' />
+ <property name='build.src.dir'     value='${build.dir}/src' />
+ <property name='build.doc.dir'     value='${build.dir}/doc/javadoc' />
+ <property name='build.data.dir'	value='${build.dir}/data/output' />
+ <property name='build.lib.dir'     value='${build.dir}/lib' />
+ 
+ <property name='jar.file'         value='${build.lib.dir}/${name}.jar'/>
+ <property name='jar.samples.file' value='${build.lib.dir}/${name}Samples.jar'/>
+ <property name='jar.xni.file'     value='${build.lib.dir}/${name}Xni.jar'/>
+
+ <property name='zip.file' value='${build.dir}/${fullname}.zip'/>
+ <property name='tgz.file' value='${build.dir}/${fullname}.tar.gz'/>
+
+ <property name='package' value='org.cyberneko.html'/>
+
+ <property name='version.java.dir' value='${build.src.dir}/org/cyberneko/html'/>
+ <property name='version.java'     value='${version.java.dir}/Version.java'/>
+ 
+ <!-- DEPENDENCIES -->
+ <available property='bcel.available' file='${lib.dir}/bcel-5.2.jar' />
+
+ <property name="xerces.version" value="2.8.1"/>
+
+ <!-- TARGETS --> 
+ <target name='all' depends='zip,tgz'/>
+
+ <target name='init'>
+ </target>
+
+	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<macrodef name="compileWith" description="clean compile for the specified Xerces version">
+	<attribute name="xercesVersion" description="the name of the /lib subfolder containing Xerces"/>
+	<attribute name="bridge" description="the name of the bridge package that should be compiled"/>
+	<sequential>
+		<echo message="Compiling with Xerces-@{xercesVersion}"/>
+		<delete>
+			<fileset dir='${build.classes.dir}'>
+				<include name="**/*"/>
+				<exclude name="**/xercesbridge/XercesBridge_*.*"/>
+			</fileset>
+			<fileset dir='${build.classes.dir}'>
+				<include name="**/xercesbridge/XercesBridge_@{bridge}.*"/>
+			</fileset>
+		</delete>
+		<javac destdir='${build.classes.dir}' debug='true' encoding="ISO-8859-1" 
+			source='${compile.source}' target='${compile.target}'
+			includeAntRuntime='false'>
+			<classpath>
+				<fileset dir='${lib.dir}/xerces-@{xercesVersion}' includes='*.jar' />
+			</classpath>
+			<src path='${src.dir}' />
+			<src path='${build.src.dir}' />
+			<include name='**/*.java' />
+			<exclude name="**/xercesbridge/XercesBridge_*.java"/>
+		</javac>
+		<javac destdir='${build.classes.dir}' debug='true' encoding="ISO-8859-1" 
+			source='${compile.source}' target='${compile.target}'
+			includeAntRuntime='false'>
+			<classpath>
+				<fileset dir='${lib.dir}/xerces-@{xercesVersion}' includes='*.jar' />
+			</classpath>
+			<src path='${src.dir}' />
+			<src path='${build.src.dir}' />
+			<include name="**/xercesbridge/XercesBridge_@{bridge}.java"/>
+		</javac>
+	</sequential>
+</macrodef>
+	
+<target name='compile' depends='init,version' 
+		description="compiles many times to ensure compatibility with the different Xerces versions"
+		unless="compile.skip">
+	<mkdir dir="${build.classes.dir}"/>
+	
+	<compileWith xercesVersion="2.0.2" bridge="2_0"/>
+	<compileWith xercesVersion="2.1.0" bridge="2_1"/>
+	<compileWith xercesVersion="2.2.1" bridge="2_2"/>
+	<compileWith xercesVersion="2.3.0" bridge="2_3"/>
+	<compileWith xercesVersion="2.8.1" bridge="2_3"/>
+	<compileWith xercesVersion="2.9.1" bridge="2_3"/>
+
+	<copy todir="${build.classes.dir}">
+		<fileset dir='${src.dir}' includes='**' excludes='META-INF/**, **/*.java*' />
+  	</copy>
+</target>
+
+	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+ <target name='jar' depends='compile'>
+  <mkdir dir='${build.lib.dir}' />
+  <jar jarfile='${jar.file}'>
+	<manifest>
+    	<attribute name="Built-By" value="${author}"/>
+    	<section name="org/cyberneko/html/">
+		  <attribute name="Specification-Title" value="Hyper-Text Markup Language (HTML)" />
+    	  <attribute name="Specification-Version" value="4.01" />
+	      <attribute name="Specification-Vendor" value="World Wide Web Consortium (W3C)" />
+    	  <attribute name="Implementation-Title" value="${FullTitle}" />
+	      <attribute name="Implementation-Version" value="${version}" /> 
+    	  <attribute name="Implementation-Vendor" value="${author}" />
+		  <attribute name="Implementation-URL" value="${URL}" />
+    	</section>
+	</manifest>
+    <fileset dir='.' includes='LICENSE*' />
+    <fileset dir='${build.classes.dir}' includes='org/**/*' />
+  </jar>
+  <jar jarfile='${jar.samples.file}'>
+    <fileset dir='.' includes='LICENSE.txt' />
+    <fileset dir='${build.classes.dir}' includes='sample/**' />
+  </jar>
+ </target> 
+
+ <target name='jar-xni'>
+  <mkdir dir="${build.lib.dir}"/>
+  <jar jarfile='${jar.xni.file}'>
+    <fileset dir='.' includes='LICENSE.txt' />
+    <fileset dir='${src.dir}' includes='META-INF/services/**' />
+  </jar>
+ </target>
+
+ <target name='zip' depends='jar,doc'>
+  <zip zipfile='${zip.file}'>
+    <zipfileset prefix='${fullname}' dir='.' includes='LICENSE*,README*,TODO*' />
+    <zipfileset prefix='${fullname}' dir='.' includes='build.xml' />
+    <zipfileset prefix='${fullname}' dir='.' includes='${src.dir}/**' />
+    <zipfileset prefix='${fullname}' dir='.' includes='${src.test.dir}/**' />
+    <zipfileset prefix='${fullname}' dir='.' includes='${doc.dir}/**' excludes='${doc.dir}/javadoc/**' />
+    <zipfileset prefix='${fullname}' dir='.' includes='${data.dir}/**' />
+    <zipfileset prefix='${fullname}' dir='.' includes='${lib.dir}/xercesMinimal.jar' />
+    <zipfileset prefix='${fullname}' dir='${build.dir}' includes='doc/**' />
+    <zipfileset prefix='${fullname}' dir='${build.lib.dir}' includes='**' />
+  </zip>
+ </target>
+
+ <target name='tgz' depends='zip'>
+  <unzip src='${zip.file}' dest='${build.dir}' />
+  <tar destfile='${tgz.file}' compression='gzip'>
+  	<tarfileset dir='${build.dir}' includes='${fullname}/**' />
+  </tar>
+ </target>
+
+ <target name='doc' depends='doc-init' unless='doc.done'>
+  <delete dir='${build.doc.dir}'/>
+  <mkdir dir='${build.doc.dir}'/>
+  <javadoc packagenames='${package},${package}.parsers,${package}.filters'
+           sourcepath='${src.dir}' destdir='${build.doc.dir}'
+           author='true' version='true' use='true'
+           windowtitle="${Name} Implementation"
+           doctitle="${Name}" encoding="ISO-8859-1"
+           bottom="${copyright}" 
+  />
+ </target>
+ 
+ <target name='doc-init'>
+ 	<dependset>
+ 		<srcfileset dir='${src.dir}' />
+ 		<targetfileset dir='${build.doc.dir}' />
+ 	</dependset>
+ 	<available property='doc.done' file='${build.doc.dir}/index.html' />	
+ </target>
+
+ <target name='version' depends='version-init' unless='available.version'>
+  <echo message='Generating ${version.java}'/>
+  <echo file='${version.java}'>/* ${copyright} */
+
+package org.cyberneko.html;
+
+/**
+ * This class holds version information for the ${FullTitle}.
+ *
+ * @author ${author}
+ */
+public class Version {
+
+    /** Returns the version string. */
+    public static String getVersion() { return "${Name}"; }
+
+    /** Prints the version string to standard output. */
+    public static void main(String[] argv) {
+        System.out.println(getVersion());
+    } // main(String[])
+
+} // class Version</echo>
+ </target>
+
+ <target name='version-init'>
+  <mkdir dir='${version.java.dir}/'/>
+  <dependset>
+   <srcfilelist    dir='.' files='build.xml'/>
+   <targetfilelist dir='.' files='${version.java}'/>
+  </dependset>
+  <available property='available.version' file='${version.java}'/>
+ </target>
+
+ <target name='minimal' depends='minimal-init,compile'>
+ 	<java classname='org.apache.tools.ant.Main'>
+ 		<classpath>
+ 			<pathelement path='${java.class.path}' />
+ 			<pathelement location='${lib.dir}/bcel-5.2.jar' />
+ 		</classpath>
+ 		<arg value='x-minimal' />
+ 	</java>
+ </target>
+ <target name='x-minimal'>
+ 	<unzip dest='${build.classes.dir}' src='${lib.dir}/xerces-${xerces.version}/xercesImpl-${xerces.version}.jar' />
+ 	<classfileset id='minimal.classes' 
+ 				  dir="${build.classes.dir}" includes='org/apache/**' 
+ 				  rootclass='org.cyberneko.html.HTMLConfiguration' 
+ 	/>
+ 	<mkdir dir='${build.lib.dir}' />
+ 	<jar destfile='${build.lib.dir}/xercesMinimal.jar'>
+ 		<fileset refid='minimal.classes' />
+ 		<exclude name='org/cyberneko/**' />
+	</jar>
+ </target>
+ 
+ <target name='minimal-init' unless='bcel.available'>
+ 	<fail>
+ 	!!! REQUIRED FILES MISSING !!!
+ 	
+ 	Please install the BCEL jars into the lib/ directory. 
+ 	</fail>
+</target>
+ 
+	<target name='clean'>
+		<delete dir='${build.dir}' />
+	</target>
+
+	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+	 <target name='compile.test' depends="compile" description="compiles the test classes">
+	  <mkdir dir="${build.test-classes.dir}"/>
+	  <javac destdir='${build.test-classes.dir}' debug='true' encoding="ISO-8859-1" 
+	  		 source='${compile.source}' target='${compile.target}'
+	  		 includeAntRuntime='true'>
+	  	<classpath>
+	  		<fileset dir='${lib.dir}' includes='xml-apis.jar,xerces*.jar, junit*.jar' />
+		    <pathelement location='${build.classes.dir}' />
+	  	</classpath>
+	    <src path='${src.test.dir}' />
+	  </javac>
+	 </target>
+
+	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<macrodef name="testWith" description="run the tests for the specified Xerces version">
+		<attribute name="xercesVersion" description="the name of the /lib subfolder containing Xerces"/>
+		<sequential>
+			<echo message="Testing with Xerces-@{xercesVersion}"/>
+			<mkdir dir="${build.dir}/junit/xerces-@{xercesVersion}"/>
+			<!-- 
+			We have to fork and can't use Ant to be sure that the Xerces version 
+			we specify and not an other one (for instance the one of Ant)
+			-->
+			<junit printsummary="yes" haltonfailure="false" fork="true" failureproperty="junitFailed">
+				<classpath>
+				    <pathelement path='${build.test-classes.dir}'/>
+				    <pathelement location='${build.classes.dir}' />
+			  		<fileset dir='${lib.dir}' includes='junit*.jar' />
+		  	  		<fileset dir='${lib.dir}/xerces-@{xercesVersion}' includes='*.jar' />
+				</classpath>
+	
+				<formatter type="xml"/>
+	
+				<batchtest fork="yes" todir="${build.dir}/junit/xerces-@{xercesVersion}">
+					<fileset dir="${src.test.dir}">
+						<include name="**/*Test.java"/>
+					</fileset>
+				</batchtest>
+			</junit>
+		</sequential>
+	</macrodef>
+
+	<target name="test" depends="compile, compile.test" description="Runs the junit tests and generates a report (junit jar must be in ANT_HOME/lib)">
+		<delete dir="${build.dir}/junit"/>
+		<mkdir dir="${build.dir}/junit"/>
+
+		<testWith xercesVersion="2.9.1"/>
+		<testWith xercesVersion="2.8.1"/>
+		<testWith xercesVersion="2.3.0"/>
+		<testWith xercesVersion="2.2.1"/>
+		<!--
+		<testWith xercesVersion="2.1.0"/>
+		<testWith xercesVersion="2.0.2"/>
+		-->
+
+		<junitreport todir="${build.dir}/junit">
+			<fileset dir="${build.dir}/junit">
+				<include name="**/TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="${build.dir}/junit"/>
+		</junitreport>
+		<echo message="Report has been generated to ${build.dir}/junit/index.html"/>
+		<fail message="JUnit test failed" if="junitFailed"/>
+	</target>
+	
+	<target name="deploy-mvn" depends="jar, doc" description="Deploys a release to NekoHTML maven repository">
+		<property name="mvn.bundle.sources" value="${build.dir}/dist/nekohtml-${version}-sources.jar"/>
+		<property name="mvn.bundle.javadoc" value="${build.dir}/dist/nekohtml-${version}-javadoc.jar"/>
+		<mkdir dir="${build.dir}/dist"/>
+	 	<jar destfile="${mvn.bundle.javadoc}">
+	 		<fileset dir="${build.doc.dir}"/>
+		</jar>
+	 	<jar destfile="${mvn.bundle.sources}">
+		    <fileset dir='${src.dir}' />
+		    <fileset dir='${build.src.dir}' />
+		</jar>
+
+		<path id="maven-ant-tasks.classpath" path="lib/maven-ant-tasks-2.0.8.jar" />
+		<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant"
+			classpathref="maven-ant-tasks.classpath" />
+		<artifact:pom id="maven.project" file="pom.xml" />
+		<artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
+		<artifact:deploy file="${build.lib.dir}/${name}.jar">
+			<pom refid="maven.project"/>
+			<attach file="${mvn.bundle.sources}" classifier="sources" /> 
+			<attach file="${mvn.bundle.javadoc}" classifier="javadoc" /> 
+		</artifact:deploy>
+	</target>
+</project>

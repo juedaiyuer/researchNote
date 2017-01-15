@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+  <head>
+    <title>How to Use the HTML Parser Libraries</title>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../stylesheet.css" TITLE="Style">
+  </head>
+  <body>
+  <H1>How to Use the HTML Parser libraries</H1>
+  <h3>Step 1: Java</h3>
+  You should make sure that a Java development system (JDK) is installed, not
+  just a Java runtime (JRE). If you are working in an IDE (Integrated
+  Development Environment) this is usually taken care of for you. If you are
+  using just a command line, should see help information when you type:
+  <pre>
+  javac
+  </pre>
+  Java versions greater than 1.2 are supported for the parser, and Java 1.1 for
+  the lexer. You can check your version with the command:
+  <pre>
+  java -version
+  </pre>
+  If you are using Java 5, you may need to specify option "-source 1.3" to avoid
+  some warnings.
+  <h3>Step 2: Setting the CLASSPATH</h3>
+  To use the HTML Parser you will need to add the htmlparser.jar and htmllexer.jar to the classpath.
+  If you are using an IDE, you need to add the htmlparser.jar and htmllexer.jar
+  to the list of jars/libraries used by your project.
+  <h4>NetBeans</h4>
+  <ul>
+  <li>Right click on your project in the Projects Window (Ctrl-1) and choose Properties.</li>
+  <li>In the Project Properties pane choose the Libraries view.</li>
+  <li>Select the Compile tab.</li>
+  <li>Click the Add Jar/Folder button.</li>
+  <li>Browse to &lt;htmlp_dir&gt;/lib (where where &lt;htmlp_dir&gt; is the
+  directory where you unzipped the distribution: xxx/HTMLParserProject-2.0),
+  select the htmlparser.jar and htmllexer.jar files and click on OK.</li>
+  </ul>
+  <h4>Eclipse</h4>
+  <ul>
+  <li>Right click on your project in the Package Explorer Window (Shift-Alt-Q + P) and choose Properties.</li>
+  <li>In the Properties pane choose the Java Build Path view.</li>
+  <li>Select the Libraries tab.</li>
+  <li>Click the Add External Jars button.</li>
+  <li>Browse to &lt;htmlp_dir&gt;/lib (where where &lt;htmlp_dir&gt; is the
+  directory where you unzipped the distribution: xxx/HTMLParserProject-2.0),
+  select the htmlparser.jar and htmllexer.jar files and click on OK.</li>
+  </ul>
+  <h4>Command Line</h4>
+  You can either add the jars to the CLASSPATH environment variable, or specify
+  it each time on the command line:
+  <h5>Windows</h5>
+  <pre>set CLASSPATH=[htmlp_dir]\lib\htmlparser.jar;[htmlp_dir]\lib\htmllexer.jar;%CLASSPATH%</pre>
+  where [htmlp_dir] is the directory where you unzipped the distribution:
+  xxx\HTMLParserProject-2.0, or use:
+  <pre>javac -classpath=[htmlp_dir]\lib\htmlparser.jar;[htmlp_dir]\lib\htmllexer.jar  MyProgram.java</pre>
+  <h5>Linux</h5>
+  <pre>export CLASSPATH=[htmlp_dir]/lib/htmlparser.jar:[htmlp_dir]/lib/htmllexer.jar:$CLASSPATH</pre>
+  where [htmlp_dir] is the directory where you unzipped the distribution:
+  xxx/HTMLParserProject-2.0, or use
+  <pre>javac -classpath=[htmlp_dir]/lib/htmlparser.jar:[htmlp_dir]/lib/htmllexer.jar  MyProgram.java</pre>
+  <h3>Step 3: Import Necessary Classes</h3>
+  Whatever classes you use from the HTML Parser libraries will need to be
+  imported by your program. For example, the simplest usage is:
+  <pre>
+    import org.htmlparser.Parser;
+    import org.htmlparser.util.NodeList;
+    import org.htmlparser.util.ParserException;
+  
+    class Test
+    {
+        public static void main (String[] args)
+        {
+            try
+            {
+                Parser parser = new Parser (args[0]);
+                NodeList list = parser.parse (null);
+                System.out.println (list.toHtml ());
+            }
+            catch (ParserException pe)
+            {
+                pe.printStackTrace ();
+            }
+        }
+    }
+  </pre>
+  Note the import statements may also have been written:
+  <pre>
+    import org.htmlparser.*;
+    import org.htmlparser.util.*;
+  </pre>
+  <h3>Step 4: Compile & Run</h3>
+  Within an IDE the compile and execute steps are usually combined.
+  <h4>NetBeans</h4>
+  <ul>
+  <li>From the Run menu select Run Main Project (F6).</li>
+  </ul>
+  <h4>Eclipse</h4>
+  <ul>
+  <li>From the Run menu select Run... and browse to the Main class and click the Run button.</li>
+  </ul>
+  <h4>Command Line</h4>
+  The above program in a file called Test.java can be compiled and run with the commands:
+  <h5>Windows</h5>
+  <pre>
+  javac -classpath=[htmlp_dir]\lib\htmlparser.jar;[htmlp_dir]\lib\htmllexer.jar  Test.java
+  java -classpath=.;[htmlp_dir]\lib\htmlparser.jar;[htmlp_dir]\lib\htmllexer.jar  Test.java
+  </pre>
+  <h5>Linux</h5>
+  <pre>
+  javac -classpath=[htmlp_dir]/lib/htmlparser.jar:[htmlp_dir]/lib/htmllexer.jar  Test.java
+  java -classpath=.:[htmlp_dir]/lib/htmlparser.jar:[htmlp_dir]/lib/htmllexer.jar  Test.java
+  </pre>
+  </body>
+</html>

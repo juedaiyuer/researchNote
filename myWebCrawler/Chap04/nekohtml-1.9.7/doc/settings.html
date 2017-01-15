@@ -1,0 +1,429 @@
+<title>NekoHTML | Parser Settings</title>
+<link rel=stylesheet type=text/css href=style.css>
+<style type='text/css'>
+.see {
+ margin: 0; margin-top: 0.25em;
+ font-size: 0.8em; 
+}
+</style>
+
+<h1>Parser Settings</h1>
+<div class='navbar'>
+[
+<a href='index.html'>Top</a>
+|
+<a href='usage.html'>Usage</a>
+|
+Settings
+|
+<a href='filters.html'>Filters</a>
+|
+<a href='javadoc/index.html'>JavaDoc</a>
+|
+<a href='faq.html'>FAQ</a>
+|
+<a href='software.html'>Software</a>
+|
+<a href='changes.html'>Changes</a>
+]
+</div>
+
+<h2>Configuring Parser</h2>
+<p>
+The application can set a variety of NekoHTML settings to more
+precisely control the behavior of the parser. These settings
+can be set directly on the <code>HTMLConfiguration</code> class
+or on the supplied parser classes by calling the
+<code>setFeature</code> and <code>setProperty</code> methods.
+For example:
+<pre class='code'>
+<span class='code-comment'>// settings on HTMLConfiguration</span>
+org<span class='code-punct'>.</span>apache<span class='code-punct'>.</span>xerces<span class='code-punct'>.</span>xni<span class='code-punct'>.</span>parser<span class='code-punct'>.</span>XMLParserConfiguration config <span class='code-punct'>=</span>
+  <span class='code-keyword'>new</span> org<span class='code-punct'>.</span>cyberneko<span class='code-punct'>.</span>html<span class='code-punct'>.</span>HTMLConfiguration<span class='code-punct'>();</span>
+config<span class='code-punct'>.</span>setFeature<span class='code-punct'>(</span><span class='code-string'>"http://cyberneko.org/html/features/augmentations"</span><span class='code-punct'>,</span> <span class='code-keyword'>true</span><span class='code-punct'>);</span>
+config<span class='code-punct'>.</span>setProperty<span class='code-punct'>(</span><span class='code-string'>"http://cyberneko.org/html/properties/names/elems"</span><span class='code-punct'>,</span> <span class='code-string'>"lower"</span><span class='code-punct'>);</span>
+
+<span class='code-comment'>// settings on DOMParser</span>
+org<span class='code-punct'>.</span>cyberneko<span class='code-punct'>.</span>html<span class='code-punct'>.</span>parsers<span class='code-punct'>.</span>DOMParser parser <span class='code-punct'>=</span> 
+  <span class='code-keyword'>new</span> org<span class='code-punct'>.</span>cyberneko<span class='code-punct'>.</span>html<span class='code-punct'>.</span>parsers<span class='code-punct'>.</span>DOMParser<span class='code-punct'>();</span>
+parser<span class='code-punct'>.</span>setFeature<span class='code-punct'>(</span><span class='code-string'>"http://cyberneko.org/html/features/augmentations"</span><span class='code-punct'>,</span> <span class='code-keyword'>true</span><span class='code-punct'>);</span>
+parser<span class='code-punct'>.</span>setProperty<span class='code-punct'>(</span><span class='code-string'>"http://cyberneko.org/html/properties/names/elems"</span><span class='code-punct'>,</span> <span class='code-string'>"lower"</span><span class='code-punct'>);</span>
+</pre>
+
+<h2>Features</h2>
+The NekoHTML parser supports the following features:
+<table cellpadding='4' cellspacing='0'>
+ <tr><th>Feature Id / Description<th>Default
+ <tr>
+  <td>
+   <a name='namespaces'></a>
+   <span class='id'>http://xml.org/sax/features/namespaces</span>
+   <br>
+   Specifies if the NekoHTML parser should perform namespace
+   processing. If enabled, namespace binding attributes are
+   processed and elements and attributes are bound to the defined
+   namespaces.
+   <p class='see'>
+   See:&nbsp;<a href='#override-namespaces'>http://cyberneko.org/html/features/override-namespaces</a>
+  <td align='center'>true
+ <tr>
+  <td>
+   <a name='balance-tags'></a>
+   <span class='id'>http://cyberneko.org/html/features/balance-tags</span>
+   <br>
+   Specifies if the NekoHTML parser should attempt to balance
+   the tags in the parsed document. Balancing the tags fixes up many
+   common mistakes by adding missing parent elements, automatically
+   closing elements with optional end tags, and correcting unbalanced
+   inline element tags. In order to process HTML documents as XML, this
+   feature should <strong>not</strong> be turned off. This feature is
+   provided as a performance enhancement for applications that only
+   care about the appearance of specific elements, attributes, and/or
+   content regardless of the document's ill-formed structure.
+  <td align='center'>true
+ <tr>
+  <td>
+   <a name='override-doctype'></a>
+   <span class='id'>http://cyberneko.org/html/features/override-doctype</span>
+   <br>
+   Specifies whether the NekoHTML parser should override the public
+   and system identifier values specified in the document type declaration.
+   <p class='see'>
+   See:&nbsp;<a href='#doctype-pubid'>http://cyberneko.org/html/properties/doctype/pubid</a>
+   <br>
+   See:&nbsp;<a href='#doctype-sysid'>http://cyberneko.org/html/properties/doctype/sysid</a>
+  <td align='center'>false
+  <tr>
+   <td>
+    <a name='insert-doctype'></a>
+    <span class='id'>http://cyberneko.org/html/features/insert-doctype</span>
+    <br>
+    Specifies whether the NekoHTML parser should insert a document type
+    declaration into the document handler callbacks. The values for the
+    public and system identifiers are taken from the sysid and pubid
+    properties. Therefore, those properties should be set if this
+    feature is turned on. Also, setting this feature to <code>true</code> 
+    will cause the parser to ignore any document type declaration that 
+    appears in the document.
+    <p class='see'>
+    See:&nbsp;<a href='#doctype-pubid'>http://cyberneko.org/html/properties/doctype/pubid</a>
+    <br>
+    See:&nbsp;<a href='#doctype-sysid'>http://cyberneko.org/html/properties/doctype/sysid</a>
+   <td align='center'>false
+ <tr>
+  <td>
+   <a name='override-namespaces'></a>
+   <span class='id'>http://cyberneko.org/html/features/override-namespaces</span>
+   <br>
+   Specifies whether the NekoHTML parser should override the namespace 
+   URI bound to HTML elements and attributes.
+   <p class='see'>
+   See:&nbsp;<a href='#namespaces-uri'>http://cyberneko.org/html/properties/namespaces-uri</a>
+  <td align='center'>false
+  <tr>
+   <td>
+    <a name='insert-namespaces'></a>
+    <span class='id'>http://cyberneko.org/html/features/insert-namespaces</span>
+    <br>
+    Specifies whether the NekoHTML parser should insert namespace URI 
+    bindings to HTML elements and attributes. The value for the
+    namespace URI is taken from the namespaces property. Therefore, 
+    that property should be set if this feature is turned on. 
+    <p class='see'>
+    See:&nbsp;<a href='#namespaces-uri'>http://cyberneko.org/html/properties/namespaces-uri</a>
+   <td align='center'>false
+ <tr>
+  <td>
+   <a name='ignore-outside-content'></a>
+   <span class='id'>http://cyberneko.org/html/features/balance-tags/ignore-outside-content</span>
+   <br>
+   Specifies if the NekoHTML parser should ignore content after the end 
+   of the document root element. If this feature is set to true, all 
+   elements and character content appearing outside of the document body 
+   is consumed. If set to false, the end elements for the &lt;body&gt;
+   and &lt;html&gt; are ignored, allowing content appearing outside of
+   the document to be parsed and communicated to the application.
+  <td align='center'>false
+ <tr>
+  <td>
+   <a name='document-fragment'></a>
+   <span class='id'>http://cyberneko.org/html/features/balance-tags/document-fragment</span>
+   <br>
+   Specifies if the tag balancer should operate as if a fragment
+   of HTML is being parsed. With this feature set, the tag balancer
+   will not attempt to insert a missing body elements around content
+   and markup. However, proper parents for elements contained within
+   the &lt;body&gt; element will still be inserted. This feature should 
+   <strong>not</strong> be used when using the <code>DOMParser</code>
+   class. In order to parse a DOM <code>DocumentFragment</code>, use the
+   <code>DOMFragmentParser</code> class.
+  <td align='center'>false
+ <tr>
+  <td>
+   <a name='normalize-attributes'></a>
+   <span class='id'>http://cyberneko.org/html/features/scanner/normalize-attrs</span>
+   <br>
+   Specifies whether attribute values should be normalized according to
+   section <a href='http://www.w3.org/TR/xml/#AVNormalize'>3.3.3</a> of
+   the XML 1.0 specification. When set to <code>false</code>, only
+   end-of-line normalization and expansion of entities are performed.
+   When set to <code>true</code>, leading and trailing whitespace is
+   trimmed and consecutive whitespace is normalized to a single space
+   character.
+   <strong>Note:</strong>
+   The raw attribute values can be queried by turning on the the 
+   <a href='#augmentations'>augmentations</a> feature and using XNI.
+   <p class='see'>
+   See:&nbsp;<a href='#augmentations'>http://cyberneko.org/html/features/augmentations</a>
+   <td align='center'>false
+ <tr>
+  <td>
+   <a name='cdata-sections'></a>
+   <span class='id'>http://cyberneko.org/html/features/scanner/cdata-sections</span>
+   <br>
+   Specifies whether CDATA sections are reported as character content.
+   If set to <code>false</code>, CDATA sections are reported as comments. 
+   When reported as comments, the comment text is prefixed with "[CDATA[" 
+   and end with "]]". This prefix and suffix is <em>not</em>
+   included when reported as character content.
+  <td align='center'>false
+ <tr>
+  <td>
+   <a name='notify-char-refs'></a>
+   <span class='id'>http://apache.org/xml/features/scanner/notify-char-refs</span>
+   <br>
+   Specifies whether character entity references (e.g. &amp;#32;, &amp;#x20;, 
+   etc) should be reported to the registered document handler. The name of 
+   the entity reported will contain the leading pound sign and optional 'x' 
+   character. For example, the name of the character entity reference
+   <code>&amp;#x20;</code> will be reported as "#x20".
+  <td align='center'>false
+ <tr>
+  <td>
+   <a name='notify-builtin-xml-refs'></a>
+   <span class='id'>http://apache.org/xml/features/scanner/notify-builtin-refs</span>
+   <br>
+   Specifies whether the XML built-in entity references (e.g. &amp;amp;, 
+   &amp;lt;, etc) should be reported to the registered document handler.
+   This only applies to the five pre-defined XML general entities --
+   specifically, "amp", "lt", "gt", "quot", and "apos". This is done for
+   compatibility with the Xerces feature.
+   To be notified of the built-in entity references in HTML, set the 
+   <code>http://cyberneko.org/html/features/scanner/notify-builtin-refs</code> 
+   feature to <code>true</code>.
+  <td align='center'>false
+ <tr>
+  <td>
+   <a name='notify-builtin-html-refs'></a>
+   <span class='id'>http://cyberneko.org/html/features/scanner/notify-builtin-refs</span>
+   <br>
+   Specifies whether the HTML built-in entity references (e.g. &amp;nobr;, 
+   &amp;copy;, etc) should be reported to the registered document
+   handler. This <em>includes</em> the five pre-defined XML general 
+   entities.
+  <td align='center'>false
+ <tr>
+  <td>
+   <a name='fix-mswindows-refs'></a>
+   <span class='id'>http://cyberneko.org/html/features/scanner/fix-mswindows-refs</span>
+   <br>
+   Specifies whether to fix character entity references for Microsoft 
+   Windows&reg; characters as described at
+   <a href='http://www.cs.tut.fi/~jkorpela/www/windows-chars.html'>http://www.cs.tut.fi/~jkorpela/www/windows-chars.html</a>.
+  <td align='center'>false
+ <tr>
+  <td>
+   <a name='ignore-specified-charset'></a>
+   <span class='id'>http://cyberneko.org/html/features/scanner/ignore-specified-charset</span>
+   <br>
+   Specifies whether to ignore the character encoding specified within the 
+   &lt;meta http-equiv='Content-Type' content='text/html;charset=...'&gt; 
+   tag. By default, NekoHTML checks this tag for a charset and changes the 
+   character encoding of the scanning reader object. Setting this feature 
+   to <code>true</code> allows the application to override this behavior.
+   <p class='see'>
+   See: <a href='#default-encoding'>http://cyberneko.org/html/properties/default-encoding</a>
+  <td align='center'>false
+ <tr>
+  <td>
+   <a name='script-strip-comment-delims'></a>
+   <span class='id'>http://cyberneko.org/html/features/scanner/script/strip-comment-delims</span>
+   <br>
+   Specifies whether the scanner should strip HTML comment delimiters
+   (i.e. "&lt;!--" and "--&gt;") from &lt;script&gt; element content.
+   <p class='see'>
+   See: <a href='#style-strip-comment-delims'>http://cyberneko.org/html/features/scanner/style/strip-comment-delims</a>
+   <br>
+   See: <a href='#script-strip-cdata-delims'>http://cyberneko.org/html/features/scanner/script/strip-cdata-delims</a>
+  <td align='center'>false
+ <tr>
+  <td>
+   <a name='script-strip-cdata-delims'></a>
+   <span class='id'>http://cyberneko.org/html/features/scanner/script/strip-cdata-delims</span>
+   <br>
+   Specifies whether the scanner should strip XHTML CDATA delimiters
+   (i.e. "&lt;![CDATA[" and "]]&gt;") from &lt;script&gt; element content.
+   <p class='see'>
+   See: <a href='#style-strip-cdata-delims'>http://cyberneko.org/html/features/scanner/style/strip-cdata-delims</a>
+   <br>
+   See: <a href='#script-strip-comment-delims'>http://cyberneko.org/html/features/scanner/script/strip-comment-delims</a>
+  <td align='center'>false
+ <tr>
+  <td>
+   <a name='style-strip-comment-delims'></a>
+   <span class='id'>http://cyberneko.org/html/features/scanner/style/strip-comment-delims</span>
+   <br>
+   Specifies whether the scanner should strip HTML comment delimiters
+   (i.e. "&lt;!--" and "--&gt;") from &lt;style&gt; element content.
+   <p class='see'>
+   See: <a href='#script-strip-comment-delims'>http://cyberneko.org/html/features/scanner/script/strip-comment-delims</a>
+   <br>
+   See: <a href='#style-strip-cdata-delims'>http://cyberneko.org/html/features/scanner/style/strip-cdata-delims</a>
+  <td align='center'>false
+ <tr>
+  <td>
+   <a name='style-strip-cdata-delims'></a>
+   <span class='id'>http://cyberneko.org/html/features/scanner/style/strip-cdata-delims</span>
+   <br>
+   Specifies whether the scanner should strip XHTML CDATA delimiters
+   (i.e. "&lt;![CDATA[" and "]]&gt;") from &lt;style&gt; element content.
+   <p class='see'>
+   See: <a href='#script-strip-cdata-delims'>http://cyberneko.org/html/features/scanner/script/strip-cdata-delims</a>
+   <br>
+   See: <a href='#style-strip-comment-delims'>http://cyberneko.org/html/features/scanner/style/strip-comment-delims</a>
+  <td align='center'>false
+ <tr>
+  <td>
+   <a name='augmentations'></a>
+   <span class='id'>http://cyberneko.org/html/features/augmentations</span>
+   <br>
+   Specifies whether infoset items that correspond to the
+   HTML events are included in the parsing pipeline. If
+   included, the augmented item will implement the
+   <code>HTMLEventInfo</code> interface found in the
+   <code>org.cyberneko.html</code> package. The augmentations 
+   can be queried in XNI by calling the <code>getItem</code> 
+   method with the key 
+   "http://cyberneko.org/html/features/augmentations".
+   Currently, the HTML event info augmentation can report event
+   character boundaries and whether the event is synthesized.
+  <td align='center'>false
+ <tr>
+  <td>
+   <a name='report-errors'></a>
+   <span class='id'>http://cyberneko.org/html/features/report-errors</span>
+   <br>
+   Specifies whether errors should be reported to the registered error
+   handler. Since HTML applications are supposed to permit the
+   liberal use (and abuse) of HTML documents, errors should
+   normally be handled silently. However, if the application wants
+   to know about errors in the parsed HTML document, this feature
+   can be set to <code>true</code>.
+  <td align='center'>false
+</table>
+
+<h2>Properties</h2>
+The NekoHTML parser supports the following properties:
+<table cellpadding='4' cellspacing='0'>
+ <tr><th>Property Id / Description<th>Values<th>Default
+ <tr>
+  <td>
+   <a name='filters'></a>
+   <span class='id'>http://cyberneko.org/html/properties/filters</span>
+   <br>
+   This property allows applications to append custom document
+   processing components to the end of the default NekoHTML parser 
+   pipeline. The value of this property must be an array of type
+   <code>org.apache.xerces.xni.parser.XMLDocumentFilter</code>
+   and no value of this array is allowed to be null. The document 
+   filters are appended to the parser pipeline in array order.
+   Please refer to the <a href='filters.html'>filters</a>
+   documentation for more information.
+  <td align='center'><nobr>XMLDocumentFilter[]</nobr>
+  <td align='center'>null
+ <tr>
+  <td>
+   <a name='default-encoding'></a>
+   <span class='id'>http://cyberneko.org/html/properties/default-encoding</span>
+   <br>
+   Sets the default encoding the NekoHTML scanner should use
+   when parsing documents. In the absence of an
+   <code>http-equiv</code> directive in the source document,
+   this setting is important because the parser does not
+   have any support to <i>auto-detect</i> the encoding.
+   <p class='see'>
+   See:&nbsp;<a href='#ignore-specified-charset'>http://cyberneko.org/html/features/scanner/ignore-specified-charset</a>
+  <td align='center'>
+   <a href='http://www.iana.org/assignments/character-sets'>IANA</a> 
+   encoding names
+  <td align='center'><nobr>"Windows-1252"</nobr>
+ <tr>
+  <td>
+   <a name='elem-names'></a>
+   <span class='id'>http://cyberneko.org/html/properties/names/elems</span>
+   <br>
+   Specifies how the NekoHTML components should modify recognized
+   element names. Names can be converted to upper-case, converted
+   to lower-case, or left as-is. The value of "match" specifies
+   that element names are to be left as-is but the end tag name will
+   be modified to match the start tag name. This is required to
+   ensure that the parser generates a well-formed XML document.
+  <td align='center'>"upper"<br>"lower"<br>"match"
+  <td align='center'>"upper"
+ <tr>
+  <td>
+   <a name='attr-names'></a>
+   <span class='id'>http://cyberneko.org/html/properties/names/attrs</span>
+   <br>
+   Specifies how the NekoHTML components should modify attribute names
+   of recognized elements. Names can be converted to upper-case, 
+   converted to lower-case, or left as-is.
+  <td align='center'>"upper"<br>"lower"<br><nobr>"no-change"</nobr>
+  <td align='center'>"lower"
+ <tr>
+  <td>
+   <a name='doctype-pubid'></a>
+   <span class='id'>http://cyberneko.org/html/properties/doctype/pubid</span>
+   <br>
+   Specifies the document type declaration public identifier if the
+   <code>http://cyberneko.org/html/features/override-doctype</code>
+   feature is set to <code>true</code>. The default value is the HTML
+   4.01 transitional public identifier, "-//W3C//DTD HTML 4.01 Transitional//EN".
+   <p class='see'>
+   See:&nbsp;<a href='#overrid-doctype'>http://cyberneko.org/html/features/override-doctype</a>
+  <td align='center'>String
+  <td align='center'>HTML 4.01 transitional public identifier
+ <tr>
+  <td>
+   <a name='doctype-sysid'></a>
+   <span class='id'>http://cyberneko.org/html/properties/doctype/sysid</span>
+   <br>
+   Specifies the document type declaration system identifier if the
+   <code>http://cyberneko.org/html/features/override-doctype</code>
+   feature is set to <code>true</code>. The default value is the HTML
+   4.01 transitional system identifier, "http://www.w3.org/TR/html4/loose.dtd".
+   <p class='see'>
+   See:&nbsp;<a href='#overrid-doctype'>http://cyberneko.org/html/features/override-doctype</a>
+  <td align='center'>String
+  <td align='center'>HTML 4.01 transitional system identifier
+ <tr>
+  <td>
+   <a name='namespaces-uri'></a>
+   <span class='id'>http://cyberneko.org/html/properties/namespaces-uri</span>
+   <br>
+   Specifies the namespace binding URI if the
+   <code>http://cyberneko.org/html/features/override-namespaces</code>
+   feature is set to <code>true</code>. The default value is the XHTML
+   1.0 namespace, "http://www.w3.org/1999/xhtml". This property does
+   <em>not</em> affect the case of element and attributes names and
+   does <em>not</em> ensure that the output of the NekoHTML parser is
+   valid according to the XHTML specification.
+   <p class='see'>
+   See:&nbsp;<a href='#override-namespaces'>http://cyberneko.org/html/features/override-namespaces</a>
+  <td align='center'>String
+  <td align='center'>XHTML 1.0 namespaces URI
+</table>
+
+<div class='copyright'>
+(C) Copyright 2002-2008, Andy Clark. All rights reserved.
+</div>

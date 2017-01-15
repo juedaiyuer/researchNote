@@ -1,0 +1,74 @@
+BODY { background: #EEEEEE;
+       margin: 0; padding: 10;  }
+H1 { text-align: center; background: #DDDDFF;
+     border-style: solid; border-color: black; border-width: 0; 
+     border-top-width: 1; border-bottom-width: 1;
+     margin: -10; padding: 5 }
+H2 H3 H4 H5 H6 { }
+P { margin: 15; text-align: justify }
+UL { margin-right: 15 }
+OL { margin-right: 15 }
+TD DL { margin: 0 }
+DL { margin: 15 }
+DT { font-weight: bold }
+DD { font-style: italic }
+OL UL { margin: 15 }
+HR { background: black; color: black; height: 1;
+     border: none;
+     margin: 0; padding: 0 }
+
+TABLE { border-style: solid; border-color: black; border-width: 2;
+        border-right-width: 1; border-bottom-width: 1;
+        margin: 15; margin-left: 30; margin-right: 30 }
+TR { background: white; vertical-align: top }
+TH { border-style: solid; border-color: black; border-width: 0;
+     border-bottom-width: 1; border-right-width: 1;
+     background: #DDDDFF }
+TD { border-style: solid; border-color: black; border-width: 0;
+     border-right-width: 1; border-bottom-width: 1 }
+
+PRE.cmdline { background: black; color: silver;
+              border-style: solid; border-color: white; border-width: 1;
+              margin: 15; margin-left: 30; margin-right: 30; padding: 5 }
+.cmdline-prompt { color: magenta }
+.cmdline-cmd { color: yellow }
+
+PRE.code { background: darkblue; color: #00FF00;
+           border-style: solid; border-color: black; border-width: 1; 
+           margin: 15; margin-left: 30; margin-right: 30; padding: 5 }
+.code-keyword { color: yellow }
+.code-punct { color: white }
+.code-number { color: silver }
+.code-string { color: cyan }
+.code-comment { color: silver }
+.code-func { font-weight: bold }
+
+PRE.document,PRE.xml { background: white; color: black;
+                       border-style: solid; border-color: black; border-width: 1;
+                       margin: 15; margin-left: 30; margin-right: 30;
+                       padding: 5 }
+.xml-markup { color: blue }
+.xml-comment { color: silver }
+.xml-ename { color: maroon }
+.xml-aname { color: maroon }
+.xml-avalue { font-weight: bold }
+.xml-aname-xmlns { color: red }
+.xml-avalue-xmlns { color: red; font-weight: bold }
+.xml-chars { font-weight: bold }
+
+.id { font-family: sans-serif; 
+      text-decoration: underline;
+      white-space: nowrap }
+
+.navbar { margin: 10; text-align: center }
+DIV.navbar A { text-decoration: none }
+
+.new { color: red; font-weight: bold }
+.updated { color: orange; font-weight: bold }
+
+.copyright { text-align: center; 
+             background: #DDDDFF;
+             border-style: solid; border-color: black; border-width: 0;
+             border-top-width: 1; border-bottom-width: 1;
+             margin: -10; margin-top: 10 }
+

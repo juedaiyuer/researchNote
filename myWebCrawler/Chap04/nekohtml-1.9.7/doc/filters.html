@@ -1,0 +1,372 @@
+<title>NekoHTML | Pipeline Filters</title>
+<link rel=stylesheet type=text/css href=style.css>
+
+<h1>Pipeline Filters</h1>
+<div class='navbar'>
+[
+<a href='index.html'>Top</a>
+|
+<a href='usage.html'>Usage</a>
+|
+<a href='settings.html'>Settings</a>
+|
+Filters
+|
+<a href='javadoc/index.html'>JavaDoc</a>
+|
+<a href='faq.html'>FAQ</a>
+|
+<a href='software.html'>Software</a>
+|
+<a href='changes.html'>Changes</a>
+]
+</div>
+
+<h2>Table of Contents</h2>
+<ul>
+<li><a href='#overview'>Overview</a>
+ <ul>
+ <li><a href='#overview.create'>Creating a New Filter</a>
+ <li><a href='#overview.append'>Appending Filters to the Pipeline</a>
+ </ul>
+<li><a href='#filters'>Sample Filters</a>
+ <ul>
+ <li><a href='#filters.serialize'>Serializing HTML Documents</a>
+ <li><a href='#filters.namespaces'>Namespace Processing</a>
+ <li><a href='#filters.well-formedness'>Ensuring XML Well-Formedness</a>
+ <li><a href='#filters.removing'>Removing Elements</a>
+ <li><a href='#filters.identity'>Performing Identity Transform</a>
+ <li><a href='#filters.dynamic'>Dynamically Inserting Content</a>
+ </ul>
+</ul>
+
+<hr>
+
+<a name='overview'></a>
+<h2>Overview</h2>
+<p>
+The Xerces Native Interface (XNI) defines a parser configuration
+framework in which parsers can be written as a pipeline of
+modular components. This allows new parser configurations to be
+constructed by re-arranging existing components and/or writing
+custom components. And because the NekoHTML parser is written using
+this modular framework, new functionality can be quickly and
+easily added to the parser by appending custom document filters 
+to the end of the default NekoHTML parsing pipeline.
+
+<a name='overview.create'></a>
+<h3>Creating a New Filter</h3>
+<p>
+To write a custom filter, simply write a new class that implements
+the <code>XMLDocumentFilter</code> interface from the
+<code>org.apache.xerces.xni.parser</code> package of Xerces2. This
+interface allows the component to be both the <em>handler</em> of
+document events from the previous stage in the pipeline as well as 
+the <em>source</em> for the next stage in the pipeline. The 
+implementation of the new filter is completely arbitrary; it can 
+remove events from the document stream, generate new events, or 
+anything else you want!
+<p>
+NekoHTML includes a base filter class to simplify the creation of
+custom filters. To write a new filter, simply extend the 
+<code>DefaultFilter</code> class located in the
+<code>org.cyberneko.html.filters</code> package and override the
+relevent methods to add your own behavior. Once done, the only
+thing you need to do is append the filter to the end of the
+parser pipeline.
+
+<a name='overview.append'></a>
+<h3>Appending Filters to the Pipeline</h3>
+<p>
+The NekoHTML parser has a <a href='settings.html#filters'>filters
+property</a> that allows you to append custom document filters to
+the end of the default parser pipeline. The value of this property
+is an array of objects that implement the <code>XMLDocumentFilter</code>
+interface in XNI. For example, the following code instantiates a
+default filter and appends it to the parser pipeline:
+<pre class='code'>
+XMLDocumentFilter noop <span class='code-punct'>=</span> <span class='code-keyword'>new</span> DefaultFilter<span class='code-punct'>();</span>
+XMLDocumentFilter<span class='code-punct'>[]</span> filters <span class='code-punct'>= {</span> noop <span class='code-punct'>};</span>
+
+XMLParserConfiguration parser <span class='code-punct'>=</span> <span class='code-keyword'>new</span> HTMLConfiguration<span class='code-punct'>();</span>
+parser<span class='code-punct'>.</span>setProperty<span class='code-punct'>(</span><span class='code-string'>"http://cyberneko.org/html/properties/filters"</span><span class='code-punct'>,</span> filters<span class='code-punct'>);</span>
+</pre>
+
+<a name='filters'></a>
+<h2>Sample Filters</h2>
+<p>
+This section describes a few of the basic document filters 
+that are included with the NekoHTML parser. The included filters 
+enable applications to perform a variety of operations, including:
+<ul>
+<li>serializing HTML documents;
+<li>ensuring XML well-formedness;
+    and
+<li>performing identity transform.
+</ul>
+
+<a name='filters.serialize'></a>
+<h3>Serializing HTML Documents</h3>
+<p>
+NekoHTML includes a simple HTML serializer written as a filter. 
+The <code>Writer</code> class is located in the 
+<code>org.cyberneko.html.filters</code> and contains two
+different constructors. The default constructor creates a writer
+that prints to the standard output. The other constructor allows 
+the application to control the output stream and the encoding.
+For example:
+<pre class='code'>
+<span class='code-comment'>// write to standard output using UTF-8</span>
+XMLDocumentFilter writer <span class='code-punct'>=</span> new Writer<span class='code-punct'>();</span>
+
+<span class='code-comment'>// write to file with specified encoding</span>
+OutputStream stream <span class='code-punct'>=</span> <span class='code-keyword'>new</span> FileOutputStream<span class='code-punct'>(</span><span class='code-string'>"index.html"</span><span class='code-punct'>);</span>
+String encoding <span class='code-punct'>=</span> <span class='code-string'>"ISO-8859-1"</span><span class='code-punct'>;</span>
+XMLDocumentFilter writer <span class='code-punct'>=</span> <span class='code-keyword'>new</span> Writer<span class='code-punct'>(</span>stream, encoding<span class='code-punct'>);</span>
+</pre>
+<p>
+Besides serializing the HTML event stream, the writer also passes 
+the document events to the next stage in the pipeline. This allows 
+applications to insert writer filters between other custom filters 
+for debugging purposes.
+<p>
+Since an HTML document may have specified its encoding using the
+&lt;META&gt; tag and http-equiv/content attributes, the writer will
+automatically change any character set specified in this tag to
+match the encoding of the output stream. Therefore, the character
+encoding name used to construct the writer should be an official
+<a href='http://www.iana.org/assignments/character-sets'>IANA</a>
+encoding name and not a Java encoding name.
+<strong>Note:</strong>
+The modified character set in the &lt;META&gt; tag is <em>not</em>
+propagated to the next stage in the pipeline. The changed value is
+only output to the stream; the original value is sent to the next
+stage in the pipeline.
+<p>
+For convenience, the <code>Writer</code> class contains a 
+<code>main</code> method that allows you to run it as a program.
+This can be used for debugging purposes in order to see what the
+NekoHTML parser is generating as well as converting the character
+encoding of existing documents. 
+<p>
+The following table shows the standard usage of the writer:
+<table cellspacing='0' cellpadding='3'>
+<tr><th style='border-bottom: 0'>Usage:
+<td style='border-bottom: 0'><tt>java org.cyberneko.html.filters.Writer (options) file ...</tt>
+<tr><th style='border-bottom: solid black 1'>Options:
+<td><pre>
+  -e name  Specify IANA name of output encoding.
+  -i       Perform identity transform.
+  -p       Purify output to ensure XML well-formedness.
+  -h       Display help screen.</pre>
+</td>
+</tr>
+</table>
+
+<a name='filters.namespaces'></a>
+<h3>Namespace Processing</h3>
+<p>
+A filter to perform namespace processing is included with NekoHTML,
+for convenience. You do not need to add this filter manually because
+it is automatically added to the parsing pipeline if the SAX namespaces 
+feature is enabled. However, if you are interested, the
+<code>NamespaceBinder</code> component is included in the 
+<code>org.cyberneko.html.filters</code> package.
+<p>
+<strong>Note:</strong>
+This component does not perform <em>any</em> namespace processing
+unless the SAX namespaces feature, 
+"http://xml.org/sax/features/namespaces", is enabled.
+
+<a name='filters.well-formedness'></a>
+<h3>Ensuring XML Well-Formedness</h3>
+<p>
+HTML allows documents to be less strict than XML documents which 
+means that most HTML documents cannot be parsed with an XML parser. 
+But even if an HTML document can be parsed and accessed by
+applications using standard XML programming interfaces, many
+applications need to produce well-formed output. Not only do tags
+need to be balanced properly, but the document content must also
+be legal according to the XML specification. Therefore, the 
+NekoHTML parser provides a filter that "purifies" the input, 
+ensuring that the output is well-formed XML.
+<p>
+The <code>Purifier</code> class in the
+<code>org.cyberneko.html.filters</code> package lets the application
+convert the HTML input into well-formed XML output. Some of the
+changes that the Purifier performs, are:
+<ul>
+<li>fixing illegal element and attribute names;
+<li>ensuring the string "--" does not appear in the content of
+    a comment;
+<li>escaping illegal characters appearing in the document;
+<li>etc.
+</ul>
+
+<a name='filters.removing'></a>
+<h3>Removing Elements</h3>
+<p>
+The NekoHTML parser also provides a basic document filter capable 
+of removing specified elements from the processing stream. The
+<code>ElementRemover</code> class is located in the 
+<code>org.cyberneko.html.filters</code> package and provides
+two options for processing document elements:
+<ul>
+<li>specifying those elements which should be accepted and,
+    optionally, which attributes of that element should be
+    kept; and
+<li>specifying those elements whose tags and content should be
+    completely removed from the event stream.
+</ul>
+<p>
+The first option allows the application to specify which elements
+appearing in the event stream should be accepted and, therefore,
+passed on to the next stage in the pipeline. All elements 
+<em>not</em> in the list of acceptable elements have their start 
+and end tags stripped from the event stream <em>unless</em> those
+elements appear in the list of elements to be removed. 
+<p>
+The second option allows the application to specify which elements
+should be completely removed from the event stream. When an element
+appears that is to be removed, the element's start and end tag as
+well as all of that element's content is removed from the event
+stream.
+<p>
+A common use of this filter would be to only allow rich-text
+and linking elements as well as the character content to pass 
+through the filter &mdash; all other elements would be stripped.
+The following code shows how to configure this filter to perform
+this task:
+<pre class='code'>
+ElementRemover remover <span class='code-punct'>=</span> <span class='code-keyword'>new</span> ElementRemover<span class='code-punct'>();</span>
+remover<span class='code-punct'>.</span>acceptElement<span class='code-punct'>(</span><span class='code-string'>"b"</span><span class='code-punct'>,</span> <span class='code-keyword'>null</span><span class='code-punct'>);</span>
+remover<span class='code-punct'>.</span>acceptElement<span class='code-punct'>(</span><span class='code-string'>"i"</span><span class='code-punct'>,</span> <span class='code-keyword'>null</span><span class='code-punct'>);</span>
+remover<span class='code-punct'>.</span>acceptElement<span class='code-punct'>(</span><span class='code-string'>"u"</span><span class='code-punct'>,</span> <span class='code-keyword'>null</span><span class='code-punct'>);</span>
+remover<span class='code-punct'>.</span>acceptElement<span class='code-punct'>(</span><span class='code-string'>"a"</span><span class='code-punct'>,</span> <span class='code-keyword'>new</span> String<span class='code-punct'>[] {</span> <span class='code-string'>"href"</span> <span class='code-punct'>});</span>
+</pre>
+<p>
+However, this would still allow the text content of other
+elements to pass through, which may not be desirable. In order
+to further "clean" the input, the <code>removeElement</code>
+option can be used. The following piece of code adds the ability
+to completely remove any &lt;SCRIPT&gt; tags and content 
+from the stream.
+<pre class='code'>
+remover<span class='code-punct'>.</span>removeElement<span class='code-punct'>(</span><span class='code-string'>"script"</span><span class='code-punct'>);</span>
+</pre>
+<p>
+This source code is included in the <code>src/sample/</code>
+directory in the file named <code>RemoveElements.java</code>.
+<p>
+<strong>Note:</strong>
+When an element is "stripped", its start and end tags are
+removed from the event stream. However, all of the element's
+text content and elements (that are accepted) are not stripped.
+To completely remove an element's content, use the
+<code>removeElement</code> method.
+<p>
+<strong>Note:</strong>
+Care should be taken when using this filter because the output
+may not be a well-balanced tree. Specifically, if the application
+removes the &lt;HTML&gt; element (with or without retaining its
+children), the resulting document event stream will no longer be
+well-formed.
+
+<a name='filters.identity'></a>
+<h3>Performing Identity Transform</h3>
+<p>
+An identity filter is provided that performs an identity 
+operation of the original document event stream generated by the 
+HTML scanner by removing events that are synthesized by the tag 
+balancer. This operation is essentially the same as turning off 
+tag-balancing in the parser. However, this filter is useful when 
+you want the tag balancer to report "errors" but do not want the 
+synthesized events in the output.
+<p>
+<strong>Note:</strong>
+This filter requires the augmentations feature to be turned on.
+For example:
+<pre class='code'>
+XMLParserConfiguration parser <span class='code-punct'>=</span> new HTMLConfiguration<span class='code-punct'>();</span>
+parser<span class='code-punct'>.</span>setFeature<span class='code-punct'>(</span><span class='code-string'>"http://cyberneko.org/html/features/augmentations"</span><span class='code-punct'>,</span> <span class='code-keyword'>true</span><span class='code-punct'>);</span>
+</pre>
+<p>
+<strong>Note:</strong>
+This isn't <em>exactly</em> the identify transform because the
+element and attributes names may have been modified from the
+original document. For example, by default, NekoHTML converts
+element names to upper-case and attribute names to lower-case.
+
+<a name='filters.dynamic'></a>
+<h3>Dynamically Inserting Content</h3>
+<p>
+The NekoHTML parser has the ability to dynamically insert content
+into the parsed HTML document. This functionality can be used to
+insert the result of an embedded script (e.g. JavaScript) into the 
+HTML document in place of the script element. <strong>Note:</strong>
+NekoHTML does not provide a scripting engine &mdash; only the 
+ability to insert content to be parsed.
+<p>
+To insert content into the HTML document stream, call the
+<code>pushInputStream</code> method on the NekoHTML parser
+configuration class. This method takes an <code>XMLInputSource</code>
+object as a parameter. At the moment, the character stream 
+(java.io.Reader) of the input source <strong>must</strong> be 
+set or else the implementation will throw an illegal argument 
+exception.
+<p>
+A sample program called <code>Script</code> is included in the 
+<tt>src/sample/</tt> directory that demonstrates how to use of the 
+<code>pushInputSource</code> method of the HTMLConfiguration in order 
+to dynamically insert content into the HTML stream. 
+This sample defines a new script language called "NekoScript" 
+that is a modified subset of the 
+<a href='http://www.jclark.com/sp/sgmlsout.htm'>NSGMLS format</a>. 
+In this format, each line specifies a new <i>command</i> where each 
+command may indicate a start element tag, an attribute value, 
+character content, an end element tag, etc. The following table 
+enumerates the NSGMLS features supported by the NekoScript
+language:
+<table border='1' cellspacing='0', cellpadding='3'>
+<tr>
+<th style='font-weight:normal;border-bottom:solid black 1'><tt>(<i>name</i></tt>
+<td>A start element with the specified <i>name</i>.
+<tr>
+<th style='font-weight:normal;border-bottom:solid black 1'><tt>"<i>text</i></tt>
+<td>Character content with the specified <i>text</i>.
+<tr>
+<th style='font-weight:normal;border-bottom:solid black 1'><tt>)<i>name</i></tt>
+<td>An end element with the specified <i>name</i>.
+</table>
+<p>
+When processed with the <code>Script</code> filter, the following 
+document:
+<pre class='document'>
+&lt;script type='text/x-nekoscript'&gt;
+(h1
+"Header
+)h1
+&lt;/script&gt;
+</pre>
+<p>
+is equivalent to:
+<pre class='document'>
+&lt;H1&gt;Header&lt;/H1&gt;
+</pre>
+<p>
+as seen by the document handler registered with the parser.
+<p>
+The <code>Script</code> class implements a <code>main</code>
+method so that it can be run as a program. Running the program
+produces the following output: [<strong>Note:</strong> The command
+should be contiguous. It is split among separate lines in this 
+example to make it easier to read.]
+<pre class='cmdline'>
+<span class='cmdline-prompt'>&gt;</span> <span class='cmdline-cmd'>java -cp nekohtml.jar;nekohtmlSamples.jar;lib/xercesMinimal.jar 
+       sample.Script data/test33.html</span>
+&lt;H1&gt;Header&lt;/H1&gt;
+</pre>
+
+<div class='copyright'>
+(C) Copyright 2002-2008, Andy Clark. All rights reserved.
+</div>
